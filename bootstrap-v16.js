@@ -1,7 +1,8 @@
-await import('./app-v09.js?v=20260903-v18');
-await import('./patch-v10.js?v=20260903-v18');
-await import('./patch-v15-reality.js?v=20260903-v18');
-await import('./patch-v16-bughunt.js?v=20260903-v18');
-await import('./patch-v16-finalize.js?v=20260903-v18');
-await import('./patch-v17-spatial-audit.js?v=20260903-v18');
-await import('./patch-v18-access-space.js?v=20260903-v18');
+await import('./app-v09.js?v=20260903-v19');
+await import('./patch-v10.js?v=20260903-v19');
+await import('./patch-v15-reality.js?v=20260903-v19');
+await import('./patch-v16-bughunt.js?v=20260903-v19');
+await import('./patch-v16-finalize.js?v=20260903-v19');
+await import('./patch-v17-spatial-audit.js?v=20260903-v19');
+await import('./patch-v18-access-space.js?v=20260903-v19');
+await import('./patch-v19-navigation-authority.js?v=20260903-v19');
