@@ -13,17 +13,17 @@
 - 1 unidade Three.js = **1 metro**.
 - Pessoa de referência: **1,750 m**; olhos/câmera: **1,660 m**.
 
-## Sacadas e circulação vertical
+## Sacadas e circulação vertical — v1.2
 
 - Sacada frontal social: **7,076 × 1,800 m**.
 - Sacada frontal íntima: **7,076 × 1,800 m**.
-- Sacadas, decks laterais e escadas são **100% externos** ao corpo habitável e não consomem os 6,058 m de profundidade da moradia.
-- A v1.1 usa dois lances externos caminháveis na lateral direita, ligados por deck lateral:
-  - térreo → social: elevação **3,250 m**;
-  - social → íntimo: elevação **3,000 m**.
-- O usuário deve conseguir percorrer os lances com WASD; os atalhos 1/2/3 continuam disponíveis apenas como conveniência.
+- Sacadas e decks externos são **100% externos** ao corpo habitável e não consomem os 6,058 m de profundidade da moradia.
+- Circulação vertical vigente:
+  - térreo → social: **escada externa caminhável na lateral direita**, elevação **3,250 m**;
+  - social → íntimo: **escada interna caminhável**, elevação **3,000 m**, coerente com a lógica das plantas de referência.
+- O usuário deve conseguir percorrer os dois lances com WASD; 1/2/3 permanecem apenas como atalhos.
 
-## Frente do lote — implantação v1.1
+## Frente do lote — implantação vigente
 
 A referência visual aprovada continua soberana: lago natural à esquerda, lago de peixes separado à direita, horta/canteiros entre as zonas frontais, carro junto ao portão, filtros, cisterna, deck e paisagismo denso.
 
@@ -47,18 +47,21 @@ Programa obrigatório:
 
 O térreo deve permanecer visualmente aberto. O antigo paredão transversal foi removido. A faixa nominal da prancha `3,20 + 2,00 + 2,00 = 7,20 m` para oficina + depósito + lavanderia é incompatível com a largura interna; as larguras são reconciliadas proporcionalmente sem alterar o envelope da casa.
 
+Detalhamento v1.2 inclui coifa/churrasqueira, ferramentas de oficina, leitura de lavadora/secadora e mobiliário gourmet orientado corretamente.
+
 ## Pavimento social
 
 - envelope: **7,076 × 6,058 m**;
 - banheiro de referência: **1,600 × 2,200 m**;
-- cozinha integrada com bancada, geladeira, fogão/cooktop e ilha;
-- jantar com mesa e seis cadeiras;
-- sala com sofá, mesa de centro e TV;
+- cozinha integrada com bancada, geladeira, fogão/cooktop, cuba, metais, armários, backsplash e ilha;
+- jantar com mesa e seis cadeiras voltadas para a mesa;
+- sala com sofá voltado para a TV, mesa de centro, rack/TV, tapete e pendentes;
 - grandes esquadrias;
 - sacada externa;
-- acesso por escada real caminhável.
+- escada externa de chegada do térreo;
+- escada interna real para o pavimento íntimo.
 
-A cota `sala/jantar 7,00 × 4,40` é tratada como zona funcional aberta, não como retângulo isolado.
+O banheiro social deve ser reconhecível como banheiro completo: vaso, bancada/cuba, espelho, metais, box e acessórios. A cota `sala/jantar 7,00 × 4,40` permanece tratada como zona funcional aberta.
 
 ## Pavimento íntimo
 
@@ -69,11 +72,23 @@ A cota `sala/jantar 7,00 × 4,40` é tratada como zona funcional aberta, não co
 - escritório/gamer;
 - circulação;
 - sacada externa;
-- acesso por escada real caminhável.
+- chegada da escada interna social → íntimo.
 
 ### Quarto dos filhos
 
-A solução vigente usa **uma treliche com 3 camas sobrepostas**, não três camas espalhadas pelo quarto. Deve existir bancada de estudo para os três e circulação livre.
+A solução vigente usa **uma treliche com 3 camas sobrepostas**, não três camas espalhadas. A treliche recebe guarda-corpos, roupa de cama e escada própria; há bancada de estudo para os três e nichos individuais, mantendo circulação livre.
+
+### Quarto do casal
+
+Cama queen, cabeceira, travesseiros, criado-mudo, iluminação, tapete e guarda-roupa com portas/puxadores reconhecíveis.
+
+### Banheiro íntimo
+
+Deve conter vaso, bancada/cuba, espelho, metais, banheira compacta, toalheiro, nicho e iluminação de apoio.
+
+### Escritório/gamer
+
+Bancada, dois monitores, PC, cadeira e detalhes de iluminação; deve permanecer fora da faixa da escada interna.
 
 ### Quartos e cotas incompatíveis da prancha
 
@@ -103,18 +118,22 @@ Objetivo: aproximar progressivamente o walkthrough da prancha/perspectiva aprova
 - cobertura independente e fotovoltaica;
 - lagos com água, pedras e vegetação de borda;
 - paisagismo tropical/produtivo denso;
-- mobiliário reconhecível, evitando blocos cúbicos genéricos;
-- iluminação quente arquitetônica sem sacrificar FPS.
+- jardineiras nas sacadas e espreguiçadeiras no deck do lago;
+- mobiliário reconhecível com volumes arredondados e peças funcionais, evitando blocos cúbicos genéricos;
+- iluminação quente arquitetônica sem point lights pesadas.
 
 ## Performance
 
-- cena base consolidada em `app-v09.js`, seguida apenas pelos patches vigentes `patch-v10.js` e `patch-v11.js` via `bootstrap-v11.js`;
+A cena vigente carrega `app-v09.js` + patches v10, v11 e v12 via `bootstrap-v12.js`.
+
+Regras:
 - sombras dinâmicas desligadas por padrão;
 - DPR reduzido/adaptativo;
 - materiais e geometrias compartilhados;
 - elementos repetidos preferencialmente por `InstancedMesh`;
 - raycast de feedback restrito a elementos selecionáveis;
-- evitar transmission/refração e pós-processamento caro.
+- evitar transmission/refração e pós-processamento caro;
+- detalhes novos devem priorizar emissivos e geometrias simples compartilhadas em vez de luzes dinâmicas.
 
 ## Feedback
 
@@ -129,11 +148,13 @@ Objetivo: aproximar progressivamente o walkthrough da prancha/perspectiva aprova
 2. Nunca alterar silenciosamente o corpo **7,076 × 6,058 m**.
 3. Social e íntimo sempre têm o mesmo envelope.
 4. O vão central **2,200 m** é área útil fechada.
-5. Sacadas e escadas externas não reduzem área interna.
+5. Sacadas externas não reduzem área interna.
 6. A vaga não deve reservar faixa pavimentada desnecessária até a casa.
 7. Deve existir circulação pedestre contínua frente → fundos.
 8. Nenhum caminho pode passar por baixo ou através de lagos.
 9. Escadas devem existir visualmente e ser navegáveis entre os três níveis.
-10. Elementos importantes mantêm IDs estáveis para feedback.
-11. Mudança dimensional exige atualização conjunta deste master e do 3D.
-12. Estrutura, fundações, reforços, hidráulica, elétrica, vento, corrosão e legalização continuam conceituais até validação profissional.
+10. Cadeiras e sofás devem respeitar orientação funcional; nenhum mobiliário deve ficar deliberadamente virado para fora da função prevista.
+11. Banheiros precisam conter louças, metais, bancada/espelho e banho reconhecível, não apenas blocos genéricos.
+12. Elementos importantes mantêm IDs estáveis para feedback.
+13. Mudança dimensional exige atualização conjunta deste master e do 3D.
+14. Estrutura, fundações, reforços, hidráulica, elétrica, vento, corrosão e legalização continuam conceituais até validação profissional.
