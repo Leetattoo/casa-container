@@ -16,49 +16,10 @@
   </script>
 </head>
 <body>
-  <div id="hud">
-    <div id="crosshair"></div>
-    <div id="topbar">
-      <b>CASA CONTRERAS — v0.8 OTIMIZADA</b><br>
-      <span class="muted">1 unidade = 1 m • terreno 10,00 × 25,00 m • 2º e 3º pavimentos 7,076 × 6,058 m</span>
-    </div>
-    <div id="selected"></div>
-  </div>
-
-  <div id="start">
-    <div class="card">
-      <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
-      <h1>Entre no terreno em primeira pessoa</h1>
-      <p>Walkthrough em escala métrica: pessoa de referência com <b>1,75 m</b>, olhos a <b>1,66 m</b> e FOV de <b>60°</b>. Terreno <b>10,00 × 25,00 m</b>; 2º e 3º pavimentos com o mesmo envelope exato de <b>7,076 × 6,058 m</b>; vão central fechado de <b>2,20 m</b>.</p>
-      <div class="controls">
-        <div class="key"><b>W A S D</b><br>andar</div>
-        <div class="key"><b>Mouse</b><br>virar a câmera</div>
-        <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
-        <div class="key"><b>Clique esquerdo</b><br>selecionar + feedback</div>
-        <div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div>
-        <div class="key"><b>H / P</b><br>escala humana / qualidade</div>
-      </div>
-      <button id="enter">ENTRAR NO TERRENO</button>
-      <p class="note">A v0.8 reconcilia as cotas internas que eram matematicamente incompatíveis na prancha ilustrativa, sem alterar o envelope aprovado.</p>
-    </div>
-  </div>
-
-  <div id="feedback">
-    <div class="card">
-      <p class="eyebrow">FEEDBACK CONTEXTUAL</p>
-      <h2>Feedback do elemento</h2>
-      <div id="feedbackTitle" class="feedback-title"></div>
-      <div id="feedbackMeta" class="meta"></div>
-      <textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este canteiro; quero o lago 40 cm mais comprido..."></textarea>
-      <div class="row">
-        <button class="secondary" id="cancelFeedback">Cancelar</button>
-        <button id="sendFeedback">Enviar feedback</button>
-      </div>
-      <p class="note">O envio recebe confirmação do servidor e mantém backup local no navegador caso a rede falhe.</p>
-    </div>
-  </div>
-
+  <div id="hud"><div id="crosshair"></div><div id="topbar"><b>CASA CONTRERAS — v0.8 OTIMIZADA</b><br><span class="muted">1 unidade = 1 m • terreno 10,00 × 25,00 m • 2º e 3º pavimentos 7,076 × 6,058 m</span></div><div id="selected"></div></div>
+  <div id="start"><div class="card"><p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p><h1>Entre no terreno em primeira pessoa</h1><p>Walkthrough em escala métrica: pessoa de referência com <b>1,75 m</b>, olhos a <b>1,66 m</b> e FOV de <b>60°</b>. Terreno <b>10,00 × 25,00 m</b>; 2º e 3º pavimentos com o mesmo envelope exato de <b>7,076 × 6,058 m</b>; vão central fechado de <b>2,20 m</b>.</p><div class="controls"><div class="key"><b>W A S D</b><br>andar</div><div class="key"><b>Mouse</b><br>virar a câmera</div><div class="key"><b>Shift / Espaço</b><br>correr / pular</div><div class="key"><b>Clique esquerdo</b><br>selecionar + feedback</div><div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div><div class="key"><b>H / P</b><br>escala humana / qualidade</div></div><button id="enter">ENTRAR NO TERRENO</button><p class="note">A v0.8 reconcilia as cotas internas que eram matematicamente incompatíveis na prancha ilustrativa, sem alterar o envelope aprovado.</p></div></div>
+  <div id="feedback"><div class="card"><p class="eyebrow">FEEDBACK CONTEXTUAL</p><h2>Feedback do elemento</h2><div id="feedbackTitle" class="feedback-title"></div><div id="feedbackMeta" class="meta"></div><textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este canteiro; quero o lago 40 cm mais comprido..."></textarea><div class="row"><button class="secondary" id="cancelFeedback">Cancelar</button><button id="sendFeedback">Enviar feedback</button></div><p class="note">O envio recebe confirmação do servidor e mantém backup local no navegador caso a rede falhe.</p></div></div>
   <div id="toast"></div>
-  <script type="module" src="https://cdn.jsdelivr.net/gh/Leetattoo/casa-container@5eed5fdc22d6d5daa6797c480661f1028b7355fd/bootstrap-v06.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/gh/Leetattoo/casa-container@6e14976a070ec23daf14bffe0157bbfe1a64a1f6/bootstrap-v06.js"></script>
 </body>
 </html>
