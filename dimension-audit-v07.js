@@ -65,9 +65,9 @@ function addScaleGauge(scene){
   }
   const head=new THREE.Mesh(new THREE.SphereGeometry(.10,16,12),light);
   head.position.set(.34,MASTER.human.height-.10,0);g.add(head);
-  const torso=new THREE.Mesh(new THREE.CapsuleGeometry(.13,.76,6,12),dark);
-  torso.position.set(.34,1.10,0);g.add(torso);
-  const legGeo=new THREE.CapsuleGeometry(.055,.62,5,10);
+  const torso=new THREE.Mesh(new THREE.CylinderGeometry(.13,.16,.76,12),dark);
+  torso.position.set(.34,1.08,0);g.add(torso);
+  const legGeo=new THREE.CylinderGeometry(.055,.06,.62,10);
   const l1=new THREE.Mesh(legGeo,dark);l1.position.set(.27,.38,0);g.add(l1);
   const l2=new THREE.Mesh(legGeo,dark);l2.position.set(.41,.38,0);g.add(l2);
   g.position.set(-3.80,.01,-3.15);
