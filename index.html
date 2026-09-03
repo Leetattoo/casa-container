@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#0b0d0f" />
   <title>Casa Contreras — Tour 3D</title>
-  <link rel="stylesheet" href="./style.css?v=20260903-v10" />
+  <link rel="stylesheet" href="./style.css?v=20260903-v11" />
   <script type="importmap">
   {
     "imports": {
@@ -18,26 +18,27 @@
 <body>
   <div id="hud">
     <div id="crosshair"></div>
-    <div id="topbar"><b>CASA CONTRERAS — v1.0 ESCALA/ESPAÇO</b></div>
+    <div id="topbar"><b>CASA CONTRERAS — v1.1</b></div>
     <div id="selected"></div>
   </div>
   <div id="start">
     <div class="card">
       <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
-      <h1>Walkthrough métrico consolidado</h1>
-      <p>Os dois pavimentos habitáveis têm exatamente <b>7,076 × 6,058 m</b>. Descontando apenas as paredes externas usadas no modelo, o interior antes das divisórias é de aproximadamente <b>6,836 × 5,818 m = 39,77 m²</b>. As sacadas de <b>7,076 × 1,80 m</b> ficam 100% fora dessa área.</p>
+      <h1>Walkthrough métrico + circulação real</h1>
+      <p>Corpo habitável de <b>7,076 × 6,058 m</b> em cada pavimento. As sacadas e decks ficam fora desse envelope. A implantação foi redistribuída para se aproximar da prancha de referência e agora há <b>caminho contínuo até os fundos</b> e <b>escadas caminháveis entre térreo, social e íntimo</b>.</p>
       <div class="controls">
-        <div class="key"><b>W A S D</b><br>andar</div>
+        <div class="key"><b>W A S D</b><br>andar e subir escadas</div>
         <div class="key"><b>Mouse</b><br>olhar</div>
         <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
-        <div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div>
+        <div class="key"><b>1 / 2 / 3</b><br>atalhos de pavimento</div>
         <div class="key"><b>H</b><br>escala humana 1,75 m</div>
-        <div class="key"><b>G</b><br>grade real de 1 metro</div>
+        <div class="key"><b>G</b><br>grade real de 1 m</div>
         <div class="key"><b>Q</b><br>qualidade / FPS</div>
+        <div class="key"><b>Clique</b><br>feedback do elemento</div>
         <div class="key"><b>F</b><br>copiar feedbacks locais</div>
       </div>
       <button id="enter">ENTRAR NO TERRENO</button>
-      <p class="note">v1.0: treliche tripla, térreo aberto, vaga compacta junto ao portão e otimização agressiva de raycast/sombras.</p>
+      <p class="note">Implantação, mobiliário e circulação refinados conforme a prancha aprovada.</p>
     </div>
   </div>
   <div id="feedback">
@@ -46,15 +47,15 @@
       <h2>Feedback do elemento</h2>
       <div id="feedbackTitle" class="feedback-title"></div>
       <div id="feedbackMeta" class="meta"></div>
-      <textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este móvel; altera este canteiro..."></textarea>
+      <textarea id="feedbackText" placeholder="Ex.: move este móvel; altera este lago; muda esta esquadria..."></textarea>
       <div class="row">
         <button class="secondary" id="cancelFeedback">Cancelar</button>
         <button id="sendFeedback">Salvar + abrir Issue no GitHub</button>
       </div>
-      <p class="note">O feedback fica salvo localmente primeiro. Para eu conseguir lê-lo remotamente depois, confirme “Submit new issue” no GitHub. F copia/exporta os feedbacks locais já existentes.</p>
+      <p class="note">O feedback fica salvo localmente e o formulário do GitHub é aberto preenchido. Para eu conseguir lê-lo remotamente depois, confirme “Submit new issue”.</p>
     </div>
   </div>
   <div id="toast"></div>
-  <script type="module" src="./bootstrap-v10.js?v=20260903-v10"></script>
+  <script type="module" src="./bootstrap-v11.js?v=20260903-v11"></script>
 </body>
 </html>
