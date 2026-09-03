@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#0b0d0f" />
   <title>Casa Contreras — Tour 3D</title>
-  <link rel="stylesheet" href="./style.css?v=20260903-v09" />
+  <link rel="stylesheet" href="./style.css?v=20260903-v10" />
   <script type="importmap">
   {
     "imports": {
@@ -18,26 +18,26 @@
 <body>
   <div id="hud">
     <div id="crosshair"></div>
-    <div id="topbar"><b>CASA CONTRERAS — v0.9 CONSOLIDADA</b></div>
+    <div id="topbar"><b>CASA CONTRERAS — v1.0 ESCALA/ESPAÇO</b></div>
     <div id="selected"></div>
   </div>
   <div id="start">
     <div class="card">
       <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
       <h1>Walkthrough métrico consolidado</h1>
-      <p>Os dois pavimentos habitáveis usam exatamente o mesmo corpo de <b>7,076 × 6,058 m</b>. A sacada frontal mede <b>7,076 × 1,80 m</b> e fica <b>100% para fora</b> do corpo da moradia: ela não consome nenhum centímetro dos 6,058 m de profundidade do pavimento.</p>
+      <p>Os dois pavimentos habitáveis têm exatamente <b>7,076 × 6,058 m</b>. Descontando apenas as paredes externas usadas no modelo, o interior antes das divisórias é de aproximadamente <b>6,836 × 5,818 m = 39,77 m²</b>. As sacadas de <b>7,076 × 1,80 m</b> ficam 100% fora dessa área.</p>
       <div class="controls">
         <div class="key"><b>W A S D</b><br>andar</div>
         <div class="key"><b>Mouse</b><br>olhar</div>
         <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
         <div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div>
         <div class="key"><b>H</b><br>escala humana 1,75 m</div>
+        <div class="key"><b>G</b><br>grade real de 1 metro</div>
         <div class="key"><b>Q</b><br>qualidade / FPS</div>
-        <div class="key"><b>Clique</b><br>feedback do elemento</div>
         <div class="key"><b>F</b><br>copiar feedbacks locais</div>
       </div>
       <button id="enter">ENTRAR NO TERRENO</button>
-      <p class="note">Cena reescrita em um único módulo para reduzir lag e eliminar conflitos entre versões antigas.</p>
+      <p class="note">v1.0: treliche tripla, térreo aberto, vaga compacta junto ao portão e otimização agressiva de raycast/sombras.</p>
     </div>
   </div>
   <div id="feedback">
@@ -51,10 +51,10 @@
         <button class="secondary" id="cancelFeedback">Cancelar</button>
         <button id="sendFeedback">Salvar + abrir Issue no GitHub</button>
       </div>
-      <p class="note">O feedback é salvo no navegador antes de abrir o GitHub. Para ficar remoto e eu conseguir ler depois, confirme em “Submit new issue” no GitHub. A tecla F recupera também feedbacks locais das versões anteriores.</p>
+      <p class="note">O feedback fica salvo localmente primeiro. Para eu conseguir lê-lo remotamente depois, confirme “Submit new issue” no GitHub. F copia/exporta os feedbacks locais já existentes.</p>
     </div>
   </div>
   <div id="toast"></div>
-  <script type="module" src="./app-v09.js?v=20260903-v09"></script>
+  <script type="module" src="./bootstrap-v10.js?v=20260903-v10"></script>
 </body>
 </html>
