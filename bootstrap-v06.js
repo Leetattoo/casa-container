@@ -17,6 +17,9 @@ installNormalizeV08({ scene });
 const { installPerformanceV08 } = await import('./performance-v08.js?v=20260903-v08');
 installPerformanceV08({ scene, renderer });
 
+const { installShadowBudgetV08 } = await import('./shadow-budget-v08.js?v=20260903-v08');
+installShadowBudgetV08({ scene, renderer });
+
 const { installDimensionAuditV08 } = await import('./dimension-audit-v08.js?v=20260903-v08');
 installDimensionAuditV08({ scene, camera });
 
