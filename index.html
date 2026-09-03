@@ -19,8 +19,8 @@
   <div id="hud">
     <div id="crosshair"></div>
     <div id="topbar">
-      <b>CASA CONTRERAS — v0.7 ESCALA AUDITADA</b><br>
-      <span class="muted">1 unidade = 1 m • terreno 10,00 × 25,00 m • casa 7,076 × 6,058 m</span>
+      <b>CASA CONTRERAS — v0.8 OTIMIZADA</b><br>
+      <span class="muted">1 unidade = 1 m • terreno 10,00 × 25,00 m • 2º e 3º pavimentos 7,076 × 6,058 m</span>
     </div>
     <div id="selected"></div>
   </div>
@@ -29,17 +29,17 @@
     <div class="card">
       <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
       <h1>Entre no terreno em primeira pessoa</h1>
-      <p>A escala do walkthrough foi auditada em metros reais. A câmera representa um adulto de referência com <b>1,75 m</b>, olhos a <b>1,66 m</b> e campo de visão arquitetônico de <b>60°</b>. Terreno <b>10,00 × 25,00 m</b>, envelope da casa <b>7,076 × 6,058 m</b> e vão central fechado de <b>2,20 m</b>.</p>
+      <p>Walkthrough em escala métrica: pessoa de referência com <b>1,75 m</b>, olhos a <b>1,66 m</b> e FOV de <b>60°</b>. Terreno <b>10,00 × 25,00 m</b>; 2º e 3º pavimentos com o mesmo envelope exato de <b>7,076 × 6,058 m</b>; vão central fechado de <b>2,20 m</b>.</p>
       <div class="controls">
         <div class="key"><b>W A S D</b><br>andar</div>
         <div class="key"><b>Mouse</b><br>virar a câmera</div>
         <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
         <div class="key"><b>Clique esquerdo</b><br>selecionar + feedback</div>
         <div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div>
-        <div class="key"><b>H</b><br>régua humana 1,75 m</div>
+        <div class="key"><b>H / P</b><br>escala humana / qualidade</div>
       </div>
       <button id="enter">ENTRAR NO TERRENO</button>
-      <p class="note">Escala humana e envelope externo auditados. As divisórias internas ainda estão em reconciliação dimensional com a prancha; não tratar a planta atual como executiva.</p>
+      <p class="note">A v0.8 reconcilia as cotas internas que eram matematicamente incompatíveis na prancha ilustrativa, sem alterar o envelope aprovado.</p>
     </div>
   </div>
 
@@ -52,13 +52,13 @@
       <textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este canteiro; quero o lago 40 cm mais comprido..."></textarea>
       <div class="row">
         <button class="secondary" id="cancelFeedback">Cancelar</button>
-        <button id="sendFeedback">Abrir feedback no GitHub</button>
+        <button id="sendFeedback">Enviar feedback</button>
       </div>
-      <p class="note">O Issue será aberto já com ID do objeto, coordenadas do clique, posição da câmera e medidas vigentes.</p>
+      <p class="note">O envio recebe confirmação do servidor e mantém backup local no navegador caso a rede falhe.</p>
     </div>
   </div>
 
   <div id="toast"></div>
-  <script type="module" src="./bootstrap-v06.js?v=20260903-v07"></script>
+  <script type="module" src="./bootstrap-v06.js?v=20260903-v08"></script>
 </body>
 </html>
