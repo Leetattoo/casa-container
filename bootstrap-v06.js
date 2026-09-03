@@ -11,6 +11,9 @@ installCasaContrerasV06({ scene, camera, renderer });
 const { installLayoutV08 } = await import('./layout-v08.js?v=20260903-v08');
 installLayoutV08({ scene });
 
+const { installNormalizeV08 } = await import('./normalize-v08.js?v=20260903-v08');
+installNormalizeV08({ scene });
+
 const { installPerformanceV08 } = await import('./performance-v08.js?v=20260903-v08');
 installPerformanceV08({ scene, renderer });
 
