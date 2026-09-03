@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#0b0d0f" />
   <title>Casa Contreras — Tour 3D</title>
-  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./style.css?v=20260903-v09" />
   <script type="importmap">
   {
     "imports": {
@@ -16,10 +16,45 @@
   </script>
 </head>
 <body>
-  <div id="hud"><div id="crosshair"></div><div id="topbar"><b>CASA CONTRERAS — v0.8 OTIMIZADA</b><br><span class="muted">1 unidade = 1 m • terreno 10,00 × 25,00 m • 2º e 3º pavimentos 7,076 × 6,058 m</span></div><div id="selected"></div></div>
-  <div id="start"><div class="card"><p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p><h1>Entre no terreno em primeira pessoa</h1><p>Walkthrough em escala métrica: pessoa de referência com <b>1,75 m</b>, olhos a <b>1,66 m</b> e FOV de <b>60°</b>. Terreno <b>10,00 × 25,00 m</b>; 2º e 3º pavimentos com o mesmo envelope exato de <b>7,076 × 6,058 m</b>; vão central fechado de <b>2,20 m</b>.</p><div class="controls"><div class="key"><b>W A S D</b><br>andar</div><div class="key"><b>Mouse</b><br>virar a câmera</div><div class="key"><b>Shift / Espaço</b><br>correr / pular</div><div class="key"><b>Clique esquerdo</b><br>selecionar + feedback</div><div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div><div class="key"><b>H / P</b><br>escala humana / qualidade</div></div><button id="enter">ENTRAR NO TERRENO</button><p class="note">A v0.8 reconcilia as cotas internas incompatíveis da prancha ilustrativa sem alterar o envelope aprovado.</p></div></div>
-  <div id="feedback"><div class="card"><p class="eyebrow">FEEDBACK CONTEXTUAL</p><h2>Feedback do elemento</h2><div id="feedbackTitle" class="feedback-title"></div><div id="feedbackMeta" class="meta"></div><textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este canteiro; quero o lago 40 cm mais comprido..."></textarea><div class="row"><button class="secondary" id="cancelFeedback">Cancelar</button><button id="sendFeedback">Enviar feedback</button></div><p class="note">O envio recebe confirmação do servidor e mantém backup local no navegador caso a rede falhe.</p></div></div>
+  <div id="hud">
+    <div id="crosshair"></div>
+    <div id="topbar"><b>CASA CONTRERAS — v0.9 CONSOLIDADA</b></div>
+    <div id="selected"></div>
+  </div>
+  <div id="start">
+    <div class="card">
+      <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
+      <h1>Walkthrough métrico consolidado</h1>
+      <p>Os dois pavimentos habitáveis usam exatamente o mesmo corpo de <b>7,076 × 6,058 m</b>. A sacada frontal mede <b>7,076 × 1,80 m</b> e fica <b>100% para fora</b> do corpo da moradia: ela não consome nenhum centímetro dos 6,058 m de profundidade do pavimento.</p>
+      <div class="controls">
+        <div class="key"><b>W A S D</b><br>andar</div>
+        <div class="key"><b>Mouse</b><br>olhar</div>
+        <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
+        <div class="key"><b>1 / 2 / 3</b><br>térreo / social / íntimo</div>
+        <div class="key"><b>H</b><br>escala humana 1,75 m</div>
+        <div class="key"><b>Q</b><br>qualidade / FPS</div>
+        <div class="key"><b>Clique</b><br>feedback do elemento</div>
+        <div class="key"><b>F</b><br>copiar feedbacks locais</div>
+      </div>
+      <button id="enter">ENTRAR NO TERRENO</button>
+      <p class="note">Cena reescrita em um único módulo para reduzir lag e eliminar conflitos entre versões antigas.</p>
+    </div>
+  </div>
+  <div id="feedback">
+    <div class="card">
+      <p class="eyebrow">FEEDBACK CONTEXTUAL</p>
+      <h2>Feedback do elemento</h2>
+      <div id="feedbackTitle" class="feedback-title"></div>
+      <div id="feedbackMeta" class="meta"></div>
+      <textarea id="feedbackText" placeholder="Ex.: aumenta essa janela; move este móvel; altera este canteiro..."></textarea>
+      <div class="row">
+        <button class="secondary" id="cancelFeedback">Cancelar</button>
+        <button id="sendFeedback">Salvar + abrir Issue no GitHub</button>
+      </div>
+      <p class="note">O feedback é salvo no navegador antes de abrir o GitHub. Para ficar remoto e eu conseguir ler depois, confirme em “Submit new issue” no GitHub. A tecla F recupera também feedbacks locais das versões anteriores.</p>
+    </div>
+  </div>
   <div id="toast"></div>
-  <script type="module" src="https://cdn.jsdelivr.net/gh/Leetattoo/casa-container@2a34d8f64fb7ad94e7541460f2631fdd16f565e4/bootstrap-v06.js"></script>
+  <script type="module" src="./app-v09.js?v=20260903-v09"></script>
 </body>
 </html>
