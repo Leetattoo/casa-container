@@ -4,13 +4,16 @@ export function installPerformanceV08({ scene, renderer } = {}) {
   if (!scene || !renderer || window.__CASA_PERF_V08__) return;
   window.__CASA_PERF_V08__ = true;
 
+  const balancedBase = Math.min(window.devicePixelRatio || 1, 1.00);
+  const balancedMax = Math.min(window.devicePixelRatio || 1, 1.20);
   const state = {
     mode: 'balanced',
-    dpr: Math.min(window.devicePixelRatio || 1, 1.20),
-    maxPointLights: 6,
+    dpr: balancedBase,
+    maxPointLights: 4,
     fps: 0,
     samples: [],
   };
+  window.__CASA_PERF_STATE__ = state;
 
   renderer.setPixelRatio(state.dpr);
   renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -20,28 +23,26 @@ export function installPerformanceV08({ scene, renderer } = {}) {
   scene.traverse((o) => {
     if (o.isPointLight) pointLights.push(o);
     if (o.isDirectionalLight) directionals.push(o);
-
     if (!o.isMesh || !o.material) return;
+
     const id = o.userData?.id || '';
     const category = o.userData?.category || '';
     const name = o.name || '';
-
-    // MeshPhysical com transmission força passes caros. Para o walkthrough,
-    // vidro e água continuam transparentes, mas sem múltiplas refrações por frame.
     const materials = Array.isArray(o.material) ? o.material : [o.material];
+
     materials.forEach((m) => {
       if (!m) return;
       if (m.isMeshPhysicalMaterial && (m.transmission || 0) > 0) {
         if (category === 'Água') {
-          m.transmission = 0.04;
-          m.opacity = Math.max(m.opacity ?? 0.8, 0.78);
-          m.roughness = Math.max(m.roughness ?? 0.08, 0.08);
+          m.transmission = 0.03;
+          m.opacity = Math.max(m.opacity ?? 0.8, 0.80);
+          m.roughness = Math.max(m.roughness ?? 0.08, 0.09);
         } else {
           m.transmission = 0;
           m.transparent = true;
           m.opacity = Math.min(m.opacity ?? 0.42, 0.42);
           m.depthWrite = false;
-          m.roughness = Math.max(m.roughness ?? 0.05, 0.09);
+          m.roughness = Math.max(m.roughness ?? 0.05, 0.10);
         }
         m.needsUpdate = true;
       }
@@ -53,12 +54,11 @@ export function installPerformanceV08({ scene, renderer } = {}) {
   });
 
   directionals.forEach((l) => {
-    if (l.shadow) {
-      l.shadow.mapSize.set(1024, 1024);
-      l.shadow.bias = Math.min(l.shadow.bias || 0, -0.00015);
-      if (l.shadow.map) l.shadow.map.dispose();
-      l.shadow.map = null;
-    }
+    if (!l.shadow) return;
+    l.shadow.mapSize.set(1024, 1024);
+    l.shadow.bias = Math.min(l.shadow.bias || 0, -0.00015);
+    if (l.shadow.map) l.shadow.map.dispose();
+    l.shadow.map = null;
   });
 
   pointLights.sort((a, b) => (b.intensity || 0) - (a.intensity || 0));
@@ -67,18 +67,29 @@ export function installPerformanceV08({ scene, renderer } = {}) {
     l.visible = i < state.maxPointLights;
   });
 
+  function publish() {
+    window.__CASA_PERF__ = {
+      mode: state.mode,
+      fps: state.fps,
+      dpr: Math.round(state.dpr * 100) / 100,
+      pointLightsVisible: pointLights.filter((l) => l.visible).length,
+      pointLightsTotal: pointLights.length,
+      shadowMap: 1024,
+    };
+  }
+
   function applyMode(mode) {
     state.mode = mode;
     if (mode === 'high') {
-      state.dpr = Math.min(window.devicePixelRatio || 1, 1.45);
-      state.maxPointLights = 9;
+      state.dpr = Math.min(window.devicePixelRatio || 1, 1.35);
+      state.maxPointLights = 8;
     } else {
-      state.dpr = Math.min(window.devicePixelRatio || 1, 1.20);
-      state.maxPointLights = 6;
+      state.dpr = balancedBase;
+      state.maxPointLights = 4;
     }
     renderer.setPixelRatio(state.dpr);
     pointLights.forEach((l, i) => { l.visible = i < state.maxPointLights; });
-    window.__CASA_PERF__ = { ...state, pointLightsTotal: pointLights.length };
+    publish();
   }
 
   addEventListener('keydown', (e) => {
@@ -97,23 +108,16 @@ export function installPerformanceV08({ scene, renderer } = {}) {
       if (state.samples.length > 6) state.samples.shift();
 
       if (state.mode === 'balanced') {
-        if (fps < 48 && state.dpr > 0.90) {
-          state.dpr = Math.max(0.90, state.dpr - 0.10);
+        if (fps < 48 && state.dpr > 0.85) {
+          state.dpr = Math.max(0.85, state.dpr - 0.10);
           renderer.setPixelRatio(state.dpr);
-        } else if (fps > 58 && state.dpr < Math.min(window.devicePixelRatio || 1, 1.20)) {
-          state.dpr = Math.min(Math.min(window.devicePixelRatio || 1, 1.20), state.dpr + 0.05);
+        } else if (fps > 58 && state.dpr < balancedMax) {
+          state.dpr = Math.min(balancedMax, state.dpr + 0.05);
           renderer.setPixelRatio(state.dpr);
         }
       }
 
-      window.__CASA_PERF__ = {
-        mode: state.mode,
-        fps: state.fps,
-        dpr: Math.round(state.dpr * 100) / 100,
-        pointLightsVisible: pointLights.filter((l) => l.visible).length,
-        pointLightsTotal: pointLights.length,
-        shadowMap: 1024,
-      };
+      publish();
       frames = 0;
       last = now;
     }
