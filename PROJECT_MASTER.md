@@ -8,153 +8,128 @@
 - Social e íntimo têm exatamente o mesmo envelope.
 - Composição transversal: **2,438 + 2,200 + 2,438 = 7,076 m**.
 - Faixa central de **2,200 m**: fechada, útil e incorporada à moradia.
-- Parede externa de coordenação no walkthrough: **0,120 m**.
+- Parede externa de coordenação: **0,120 m**.
 - Área interna aproximada antes das divisórias: **6,836 × 5,818 = 39,772 m²**.
 - 1 unidade Three.js = **1 metro**.
 - Pessoa de referência: **1,750 m**; olhos/câmera: **1,660 m**.
 
-## Sacadas e circulação vertical — v1.3
+## v1.5 — proporção real e circulação
+
+A v1.5 elimina a cadeia de patches v11/v12/v13/v14 da produção e passa a carregar apenas `app-v09.js`, `patch-v10.js` e `patch-v15-reality.js` via `bootstrap-v15.js`. A finalidade é reduzir geometria legada, objetos duplicados, paredes invisíveis e inconsistências de escala.
+
+### Sacadas
 
 - Sacada frontal social: **7,076 × 1,800 m**.
 - Sacada frontal íntima: **7,076 × 1,800 m**.
-- Sacadas, decks laterais e escadas são **100% externos** ao corpo habitável e não consomem os 6,058 m de profundidade da moradia.
-- Circulação vertical vigente:
-  - térreo → social: **escada externa caminhável na lateral direita**, elevação **3,250 m**;
-  - social → íntimo: **segundo lance externo caminhável na mesma lateral**, elevação **3,000 m**;
-  - decks laterais nos níveis social e íntimo conectam os lances às sacadas/portas.
-- A antiga escada interna v1.2 é removida da cena. O código v1.3 neutraliza também a zona de navegação fantasma deixada pelo RAF legado.
-- O usuário deve conseguir percorrer os dois lances com WASD; 1/2/3 permanecem apenas como atalhos.
+- Sacada traseira social: **7,076 × 1,400 m**.
+- Sacada traseira íntima: **7,076 × 1,400 m**.
+- Todas são externas ao corpo habitável e não reduzem os **6,058 m** de profundidade da casa.
 
-## Frente do lote — implantação vigente
+### Escadas
 
-A referência visual aprovada continua soberana: lago natural à esquerda, lago de peixes separado à direita, horta/canteiros entre as zonas frontais, carro junto ao portão, filtros, cisterna, deck e paisagismo denso.
+- Térreo → social: lance externo pela lateral direita, cerca de **0,92 m de largura**, com 18 degraus e patamar traseiro.
+- Social → íntimo: segundo lance externo transversal atrás da casa, com 17 degraus, sem ficar empilhado sobre o primeiro.
+- Os dois lances são navegáveis com WASD; 1/2/3 permanecem somente atalhos.
+- O caminho pedestre lateral esquerdo permanece independente das escadas.
 
-Regras:
-- a vaga do carro é apenas uma área compacta próxima ao portão, suficiente para um SUV grande;
-- não existe piso veicular contínuo até a casa;
-- lago natural e lago de peixes são separados;
-- nenhum caminho pode atravessar ou ficar sob lago, deck, filtro ou outro elemento;
-- deve existir caminho pedestre contínuo da frente até os fundos;
-- caminho, vaga, lagos, filtros e canteiros não podem se sobrepor fisicamente.
+## Frente do lote
 
-## Térreo / pilotis — conceito aberto v1.3
+- Vaga compacta junto ao portão: **2,80 × 5,60 m**, apenas para um SUV grande.
+- Não existe piso veicular contínuo até a casa.
+- A garagem recebe cobertura leve própria, independente da casa.
+- Lago natural à esquerda e lago de peixes separado à direita são redesenhados com bordas orgânicas, pedras e vegetação de margem.
+- Filtros biológicos ficam junto ao lago de peixes, fora do caminho.
+- Existe caminho pedestre contínuo pela lateral oeste, aproximadamente **0,80 m**, do portão aos fundos.
+- Caminho, lagos, filtros, vaga e cobertura da garagem não podem se sobrepor.
 
-Programa obrigatório:
-- vaga/garagem;
-- oficina;
-- depósito;
-- lavanderia;
-- gourmet com churrasqueira, bancada, mesa e cadeiras;
-- pilotis e estrutura metálica aparente.
+## Térreo / pilotis
 
-A v1.3 remove os móveis e divisórias legados que permaneciam sobrepostos e reconstrói o térreo como **ambiente aberto, bonito e transitável**. Oficina, depósito e lavanderia viram três nichos de serviço na faixa posterior, com frente aberta; não existe paredão transversal fechando o pilotis. O gourmet ocupa a frente/centro com bancada, churrasqueira, cuba, frigobar, mesa de seis lugares, iluminação pendente e forro ripado. Deve existir passagem desimpedida entre frente e fundos.
+O térreo deve ser aberto e transitável. A v1.5 define:
+- corredor livre de aproximadamente **1,10 m** sob o pilotis;
+- gourmet compacto encostado à esquerda;
+- mesa familiar de seis lugares em escala menor;
+- oficina, depósito e lavanderia compactos na faixa posterior, sem paredão transversal;
+- pilotis e estrutura metálica aparentes;
+- nenhuma peça de serviço pode invadir o corredor principal.
 
-A faixa nominal da prancha `3,20 + 2,00 + 2,00 = 7,20 m` continua incompatível com a largura interna; os três nichos são reconciliados sem alterar o envelope da casa.
+## Pavimento social
 
-## Pavimento social — v1.3
-
-- envelope: **7,076 × 6,058 m**;
-- banheiro de referência: **1,600 × 2,200 m**;
-- cozinha integrada premium com marcenaria inferior e superior, torre quente/despensa, geladeira, bancada de quartzo, backsplash, cuba, metais, cooktop e coifa;
-- ilha tipo waterfall com **3 banquetas altas reais**; banquetas não podem ser modeladas como cadeiras de jantar;
-- jantar com mesa e seis cadeiras voltadas para a mesa;
-- sala com sofá voltado para a TV, mesa de centro, parede de mídia/rack e tapete;
-- grandes esquadrias;
-- sacada externa;
-- acesso pelo deck/escadas externos.
-
-O banheiro social deve ser reconhecível como banheiro completo: vaso, bancada/cuba, espelho, metais, box e acessórios. A cota `sala/jantar 7,00 × 4,40` permanece tratada como zona funcional aberta.
+O mobiliário passa a usar dimensões mais próximas de produtos reais, evitando a impressão de que a casa está menor do que é:
+- bancada de cozinha ~**2,35 × 0,60 m**;
+- ilha ~**1,75 × 0,78 m**;
+- 3 banquetas altas com assento ~**0,36 m**;
+- mesa de jantar ~**1,55 × 0,80 m**;
+- cadeiras ~**0,40 × 0,42 m**;
+- sofá de 3 lugares ~**1,90 × 0,78 m**;
+- banheiro social compacto, fechado e equipado;
+- sofá voltado para a TV e cadeiras voltadas para suas mesas.
 
 ## Pavimento íntimo
 
-- envelope: **7,076 × 6,058 m**, idêntico ao social;
-- quarto dos 3 filhos;
-- quarto do casal;
-- banheiro íntimo de referência **1,600 × 2,200 m**;
-- escritório/gamer;
-- circulação;
-- sacada externa;
-- acesso pelo segundo lance externo e deck íntimo.
-
-### Quarto dos filhos
-
-A solução vigente usa **uma treliche com 3 camas sobrepostas**, não três camas espalhadas. A treliche recebe guarda-corpos, roupa de cama e escada própria; há bancada de estudo para os três, nichos individuais e armário estreito, mantendo circulação livre.
-
-### Quarto do casal
-
-Cama queen, cabeceira, travesseiros, criado-mudo, iluminação, tapete, prateleira e guarda-roupa com portas/puxadores reconhecíveis. A v1.3 desloca cama/criado para reduzir interseções com o guarda-roupa.
-
-### Banheiro íntimo
-
-Deve conter vaso, bancada/cuba, espelho, metais, banheira compacta, toalheiro, nicho e iluminação de apoio.
-
-### Escritório/gamer
-
-Bancada, dois monitores, PC, cadeira e detalhes de iluminação; deve permanecer livre de sobreposição com circulação e banheiro.
-
-### Quartos e cotas incompatíveis da prancha
-
-A prancha imprime dois quartos de `3,40 × 3,40 m` empilhados, o que exigiria **6,80 m** de profundidade. Isso não cabe em **6,058 m externos**. A solução dimensional preserva **3,400 m de largura** e usa aproximadamente **2,859 m de profundidade livre** por quarto até revisão arquitetônica profissional.
+- Quarto do casal na frente esquerda, com cama queen **1,58 × 1,98 m** posicionada contra a parede interna/lateral, não apontada para fora da casa.
+- Guarda-roupa reduzido e afastado da cama.
+- Quarto dos filhos nos fundos à esquerda com **uma treliche de 3 camas sobrepostas**, footprint ~**0,92 × 2,00 m**, e bancada compacta para 3 posições.
+- Escritório/gamer na frente direita com bancada e cadeira menores.
+- Banheiro íntimo nos fundos à direita com vaso, bancada e banheira compacta.
+- Nenhum mobiliário deve atravessar divisórias, esquadrias ou circulação.
 
 ## Fundos produtivos
 
-Distribuição de referência:
-- estufa no setor traseiro esquerdo;
-- aviário/galinheiro no setor traseiro central;
-- depósito de ferramentas no setor traseiro direito;
-- horta horizontal central;
-- horta vertical lateral;
-- composteira em três baias;
-- jardim filtrante/reuso;
-- pomar/agrofloresta perimetral.
+Distribuição vigente:
+- estufa traseira esquerda;
+- aviário/galinheiro traseiro central;
+- depósito de ferramentas traseiro direito;
+- 6 canteiros horizontais centrais;
+- composteira em 3 baias;
+- **3 conjuntos de horta vertical** na lateral direita;
+- cisterna visível de aproximadamente **1.500 L**;
+- pomar frutífero mais denso.
 
-O caminho vindo da frente deve alcançar essa área sem atravessar canteiros, lagos ou construções.
+## Pomar frutífero
+
+A v1.5 passa a identificar árvores como frutíferas. O conjunto inclui limão, laranja, acerola, pitanga, goiaba, mexerica, manga, jabuticaba, amora e variações distribuídas pelo terreno. Árvores não podem bloquear escadas, caminho lateral, lagos, garagem ou equipamentos.
+
+## Energia e água
+
+- Cobertura principal continua independente e ventilada.
+- A v1.5 recria **10 painéis fotovoltaicos visíveis** sobre a cobertura.
+- Cisterna de água de chuva ~**1.500 L** aparece no terreno e recebe conexão visual por tubulação.
+- Filtros biológicos dos lagos permanecem externos à circulação.
 
 ## Linguagem visual
 
-Objetivo: aproximar progressivamente o walkthrough da prancha/perspectiva aprovada:
-- estrutura e containers em aço grafite escuro;
-- madeira quente em sacadas, decks, escadas e forros;
+Referência visual aprovada continua soberana:
+- aço/container grafite escuro;
+- madeira quente em decks, sacadas, escadas e mobiliário;
 - grandes panos de vidro com caixilhos pretos;
-- pilotis aparente e térreo aberto;
-- cobertura independente e fotovoltaica;
-- lagos com água, pedras e vegetação de borda;
-- paisagismo tropical/produtivo denso;
-- jardineiras nas sacadas e espreguiçadeiras no deck do lago;
-- mobiliário reconhecível com volumes arredondados, peças e ferragens funcionais, evitando blocos cúbicos genéricos;
-- iluminação quente arquitetônica preferencialmente emissiva, sem point lights pesadas.
-
-## Hard audit v1.3
-
-A cena expõe `window.__CASA_AUDIT_V13__` com verificações automáticas de:
-- sobreposição entre os principais conjuntos funcionais reconstruídos;
-- IDs duplicados;
-- transformações inválidas/não finitas;
-- caminho frontal/fundos contra lago natural, lago de peixes e vaga;
-- presença dos dois lances de escada externos;
-- geometria master 10 × 25 / 7,076 × 6,058 / vão 2,20.
-
-A cena não deve ser considerada limpa se `__CASA_AUDIT_V13__.pass` for falso. O QA automático complementa, mas não substitui, inspeção visual.
+- pilotis aberto;
+- cobertura independente com FV;
+- lagos naturais, pedras e vegetação de borda;
+- paisagismo produtivo denso;
+- móveis reconhecíveis em volumes funcionais, não cubos gigantes;
+- iluminação leve, sem point lights e sombras dinâmicas pesadas por padrão.
 
 ## Performance
 
-A cena vigente carrega `app-v09.js` + patches v10, v11 e v12 + módulos de reconstrução v13 via `bootstrap-v13.js`.
+- Produção v1.5: `app-v09.js` + `patch-v10.js` + `patch-v15-reality.js`.
+- Sombras dinâmicas desligadas.
+- DPR limitado a aproximadamente **0,88** por padrão.
+- FOV vertical: **60°**.
+- Raycast de feedback permanece restrito a elementos selecionáveis.
+- Evitar transmission/refração e pós-processamento caro.
 
-Regras:
-- sombras dinâmicas desligadas por padrão;
-- DPR reduzido/adaptativo;
-- materiais e geometrias compartilhados;
-- elementos repetidos preferencialmente por `InstancedMesh`;
-- raycast de feedback restrito a elementos selecionáveis;
-- evitar transmission/refração e pós-processamento caro;
-- detalhes novos devem priorizar emissivos e geometrias simples compartilhadas em vez de luzes dinâmicas.
+## QA v1.5
 
-## Feedback
-
-- feedback é salvo primeiro em `localStorage`;
-- em seguida é aberto um Issue GitHub preenchido;
-- para persistência remota consultável, o usuário confirma **Submit new issue**;
-- `F` copia/exporta feedbacks locais existentes.
+A cena expõe `window.__CASA_AUDIT_V15__`, conferindo pelo menos:
+- dimensões master 10 × 25 e 7,076 × 6,058;
+- sacadas frontal e traseira;
+- mobiliário recalibrado;
+- escadas separadas;
+- corredor livre no térreo;
+- 10 painéis FV;
+- 3 hortas verticais;
+- quantidade de árvores frutíferas;
+- sobreposição entre caminho, lagos, garagem, estufa e setores principais.
 
 ## Regras permanentes
 
@@ -163,13 +138,13 @@ Regras:
 3. Social e íntimo sempre têm o mesmo envelope.
 4. O vão central **2,200 m** é área útil fechada.
 5. Sacadas e escadas externas não reduzem área interna.
-6. A vaga não deve reservar faixa pavimentada desnecessária até a casa.
+6. A vaga não reserva piso desnecessário até a casa.
 7. Deve existir circulação pedestre contínua frente → fundos.
 8. Nenhum caminho pode passar por baixo ou através de lagos.
-9. Escadas devem existir visualmente e ser navegáveis entre os três níveis.
-10. Cadeiras, banquetas e sofás devem respeitar orientação e função; banquetas da ilha não são cadeiras de jantar.
-11. Banheiros precisam conter louças, metais, bancada/espelho e banho reconhecível, não apenas blocos genéricos.
-12. Nenhum mobiliário novo pode ser aceito se atravessar outro móvel, parede ou circulação principal.
-13. Elementos importantes mantêm IDs estáveis para feedback.
+9. Escadas precisam ser visualmente plausíveis e navegáveis.
+10. Mobiliário deve usar escala plausível de produto real e orientação funcional.
+11. Banheiros precisam ser completos e reconhecíveis.
+12. Nenhum mobiliário pode atravessar outro móvel, parede ou circulação principal.
+13. Sistemas sustentáveis precisam aparecer fisicamente no modelo.
 14. Mudança dimensional exige atualização conjunta deste master e do 3D.
 15. Estrutura, fundações, reforços, hidráulica, elétrica, vento, corrosão e legalização continuam conceituais até validação profissional.
