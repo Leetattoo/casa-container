@@ -1,6 +1,6 @@
 # ACTIVE SCENE — CASA CONTRERAS
 
-Estado ativo após restauração da regressão do Work e ativação da auditoria espacial v1.7 em 03/09/2026.
+Estado ativo após restauração da regressão do Work e evolução até a auditoria de acesso/espaço v1.8 em 03/09/2026.
 
 ## Cadeia obrigatória da produção
 
@@ -12,13 +12,14 @@ Estado ativo após restauração da regressão do Work e ativação da auditoria
 4. `patch-v16-bughunt.js`
 5. `patch-v16-finalize.js`
 6. `patch-v17-spatial-audit.js`
+7. `patch-v18-access-space.js`
 
 ## Regra crítica
 
 NÃO substituir esta cadeia por `app-v09.js` isolado.
 NÃO remover um patch apenas porque o nome parece legado. Antes de consolidar, portar integralmente e validar TODAS as correções visuais, geométricas, de circulação, escadas, mobiliário, implantação, paisagismo, colisão e sistemas contidas nele.
 
-O commit `0b15f8741fe23e782305f3b5172d72f65cb0559d` foi removido da branch principal porque desativava a cadeia v1.5/v1.6 e ressuscitava visualmente uma versão antiga.
+O commit `0b15f8741fe23e782305f3b5172d72f65cb0559d` foi removido da branch principal porque desativava a cadeia evoluída e ressuscitava visualmente uma versão antiga.
 
 ## Estado dimensional protegido
 
@@ -31,8 +32,16 @@ O commit `0b15f8741fe23e782305f3b5172d72f65cb0559d` foi removido da branch princ
 - 1 unidade Three.js = 1 metro
 - referência humana do walkthrough: 1,65 m; olhos visuais ~1,55 m
 
-## Estado v1.7
+## Estado v1.8
 
-A v1.7 adiciona auditoria de percepção/escala e NÃO altera a metragem da casa. Ela compacta somente mobiliário que estava superdimensionado, preserva cama queen e treliche em medidas reais, filtra colisões interiores legadas, adiciona proteção contra teleporte fora das escadas, leva troncos do pomar ao perímetro e melhora materiais/copa das árvores com baixo custo gráfico.
+A v1.7 corrige percepção/escala, paredes fantasmas, teleporte por zona errada, árvores fora do perímetro e acabamento excessivamente blocado.
+
+A v1.8 adiciona:
+- porta/vão social real alinhado ao topo da escada externa;
+- porta/vão íntimo real alinhado à sacada/patamar traseiro;
+- quarto dos filhos redistribuído para não bloquear o vão;
+- guarda-roupa do casal separado fisicamente da cama queen;
+- microdetalhes leves na cozinha/interior;
+- `window.__CASA_AUDIT_V18__` para sobreposições críticas entre móveis e presença dos acessos.
 
 Antes de alterar `bootstrap-v16.js`, `app-v09.js` ou qualquer patch ativo, comparar visualmente com a produção vigente e com `PROJECT_MASTER.md`.
