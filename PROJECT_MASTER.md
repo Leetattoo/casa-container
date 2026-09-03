@@ -13,9 +13,18 @@
 - 1 unidade Three.js = **1 metro**.
 - Pessoa de referência: **1,750 m**; olhos/câmera: **1,660 m**.
 
-## v1.5 — proporção real e circulação
+## v1.6 — heavy bug hunt / alinhamento incremental
 
-A v1.5 elimina a cadeia de patches v11/v12/v13/v14 da produção e passa a carregar apenas `app-v09.js`, `patch-v10.js` e `patch-v15-reality.js` via `bootstrap-v15.js`. A finalidade é reduzir geometria legada, objetos duplicados, paredes invisíveis e inconsistências de escala.
+A v1.6 mantém a base v1.5 e adiciona somente uma camada de correção estrutural (`patch-v16-bughunt.js`). O objetivo é eliminar bugs observados nos prints sem reescrever o modelo inteiro.
+
+### Regra permanente de escadas
+
+- **Todas as escadas ficam 100% fora do envelope habitável.**
+- Nenhum lance, patamar ou vazio de escada pode consumir os **7,076 × 6,058 m** internos dos pavimentos.
+- Térreo → social: lance externo pela lateral direita.
+- Social → íntimo: segundo lance externo atrás da casa, fora da sacada traseira, ligado por patamar externo.
+- O bug em que caminhar no térreo sob a projeção XZ da escada superior fazia a câmera aparecer no andar de cima é considerado crítico e fica bloqueado por guard de nível.
+- 1/2/3 são somente atalhos; caminhar fora das escadas nunca pode alterar pavimento.
 
 ### Sacadas
 
@@ -23,113 +32,119 @@ A v1.5 elimina a cadeia de patches v11/v12/v13/v14 da produção e passa a carre
 - Sacada frontal íntima: **7,076 × 1,800 m**.
 - Sacada traseira social: **7,076 × 1,400 m**.
 - Sacada traseira íntima: **7,076 × 1,400 m**.
-- Todas são externas ao corpo habitável e não reduzem os **6,058 m** de profundidade da casa.
+- Todas são externas ao corpo habitável.
 
-### Escadas
+## Frente do lote — referência visual
 
-- Térreo → social: lance externo pela lateral direita, cerca de **0,92 m de largura**, com 18 degraus e patamar traseiro.
-- Social → íntimo: segundo lance externo transversal atrás da casa, com 17 degraus, sem ficar empilhado sobre o primeiro.
-- Os dois lances são navegáveis com WASD; 1/2/3 permanecem somente atalhos.
-- O caminho pedestre lateral esquerdo permanece independente das escadas.
+A prancha aprovada continua soberana como referência de composição:
+- carro junto ao portão, apenas na vaga necessária;
+- cobertura leve própria sobre a garagem;
+- lago natural de banho à esquerda;
+- lago de peixes separado à direita;
+- horta frontal compacta entre as zonas livres;
+- cisterna de chuva na zona frontal esquerda;
+- filtros biológicos junto ao lago de peixes;
+- caminho pedestre contínuo pela lateral esquerda;
+- vegetação frutífera e ornamental densa sem bloquear circulação.
 
-## Frente do lote
-
-- Vaga compacta junto ao portão: **2,80 × 5,60 m**, apenas para um SUV grande.
-- Não existe piso veicular contínuo até a casa.
-- A garagem recebe cobertura leve própria, independente da casa.
-- Lago natural à esquerda e lago de peixes separado à direita são redesenhados com bordas orgânicas, pedras e vegetação de margem.
-- Filtros biológicos ficam junto ao lago de peixes, fora do caminho.
-- Existe caminho pedestre contínuo pela lateral oeste, aproximadamente **0,80 m**, do portão aos fundos.
-- Caminho, lagos, filtros, vaga e cobertura da garagem não podem se sobrepor.
+Nenhum canteiro, lago, filtro, cisterna, árvore, deck ou cobertura pode invadir o caminho ou a vaga.
 
 ## Térreo / pilotis
 
-O térreo deve ser aberto e transitável. A v1.5 define:
-- corredor livre de aproximadamente **1,10 m** sob o pilotis;
-- gourmet compacto encostado à esquerda;
-- mesa familiar de seis lugares em escala menor;
-- oficina, depósito e lavanderia compactos na faixa posterior, sem paredão transversal;
-- pilotis e estrutura metálica aparentes;
-- nenhuma peça de serviço pode invadir o corredor principal.
+- Térreo aberto, bonito e transitável.
+- Gourmet à esquerda, mesa familiar compacta e serviços na faixa posterior.
+- Oficina, depósito e lavanderia devem permanecer funcionais, sem paredão transversal.
+- Corredor livre aproximado: **1,10 m**.
+- O piso base duplicado não deve causar z-fighting ou degrau visual.
+- Pilotis e estrutura metálica permanecem aparentes.
 
 ## Pavimento social
 
-O mobiliário passa a usar dimensões mais próximas de produtos reais, evitando a impressão de que a casa está menor do que é:
-- bancada de cozinha ~**2,35 × 0,60 m**;
-- ilha ~**1,75 × 0,78 m**;
-- 3 banquetas altas com assento ~**0,36 m**;
-- mesa de jantar ~**1,55 × 0,80 m**;
-- cadeiras ~**0,40 × 0,42 m**;
-- sofá de 3 lugares ~**1,90 × 0,78 m**;
-- banheiro social compacto, fechado e equipado;
-- sofá voltado para a TV e cadeiras voltadas para suas mesas.
+Distribuição visual de referência:
+- cozinha na faixa posterior esquerda;
+- banheiro posterior direito;
+- ilha central com **3 banquetas**, não cadeiras comuns;
+- jantar central/frontal;
+- sala frontal direita com sofá voltado para a TV;
+- portas/esquadrias amplas para sacadas frontal e traseira.
+
+Mobiliário permanece em escala plausível de produto real.
 
 ## Pavimento íntimo
 
-- Quarto do casal na frente esquerda, com cama queen **1,58 × 1,98 m** posicionada contra a parede interna/lateral, não apontada para fora da casa.
-- Guarda-roupa reduzido e afastado da cama.
-- Quarto dos filhos nos fundos à esquerda com **uma treliche de 3 camas sobrepostas**, footprint ~**0,92 × 2,00 m**, e bancada compacta para 3 posições.
-- Escritório/gamer na frente direita com bancada e cadeira menores.
-- Banheiro íntimo nos fundos à direita com vaso, bancada e banheira compacta.
-- Nenhum mobiliário deve atravessar divisórias, esquadrias ou circulação.
+Distribuição de referência:
+- quarto do casal na frente esquerda;
+- quarto dos 3 filhos nos fundos à esquerda;
+- circulação no lado direito;
+- escritório/gamer na frente direita;
+- banheiro íntimo nos fundos à direita.
+
+Regras v1.6:
+- divisória longitudinal precisa ter **portas reais** para quarto do casal e quarto dos filhos; não pode existir paredão contínuo bloqueando a circulação;
+- cama do casal deve estar orientada para dentro do quarto, com cabeceira em parede interna;
+- quarto dos filhos usa **uma treliche com 3 camas sobrepostas**, footprint aproximado **0,92 × 2,00 m**;
+- bancada de estudo para 3 posições e armário compacto não podem bloquear portas;
+- gamer e banheiro permanecem fora da circulação principal.
 
 ## Fundos produtivos
 
-Distribuição vigente:
 - estufa traseira esquerda;
 - aviário/galinheiro traseiro central;
 - depósito de ferramentas traseiro direito;
-- 6 canteiros horizontais centrais;
+- 6 canteiros horizontais;
 - composteira em 3 baias;
-- **3 conjuntos de horta vertical** na lateral direita;
-- cisterna visível de aproximadamente **1.500 L**;
-- pomar frutífero mais denso.
+- **3 conjuntos de horta vertical**;
+- jardim filtrante/reuso;
+- pomar/agrofloresta perimetral mais denso.
+
+O caminho lateral deve chegar aos fundos sem atravessar estufa, canteiro, árvore ou equipamento.
 
 ## Pomar frutífero
 
-A v1.5 passa a identificar árvores como frutíferas. O conjunto inclui limão, laranja, acerola, pitanga, goiaba, mexerica, manga, jabuticaba, amora e variações distribuídas pelo terreno. Árvores não podem bloquear escadas, caminho lateral, lagos, garagem ou equipamentos.
+O conjunto inclui limão, laranja, acerola, pitanga, goiaba, mexerica, manga, jabuticaba, amora e banana, com árvores adicionais distribuídas no perímetro. Árvores não podem bloquear escadas, caminho, lagos, garagem ou sistemas de água.
 
 ## Energia e água
 
-- Cobertura principal continua independente e ventilada.
-- A v1.5 recria **10 painéis fotovoltaicos visíveis** sobre a cobertura.
-- Cisterna de água de chuva ~**1.500 L** aparece no terreno e recebe conexão visual por tubulação.
-- Filtros biológicos dos lagos permanecem externos à circulação.
+- Cobertura independente e ventilada.
+- **10 painéis fotovoltaicos visíveis** na cobertura.
+- Reservatório operacional pequeno na cobertura.
+- Calhas frontal/traseira e descidas visuais ligadas à captação.
+- Cisterna de chuva ~**1.500 L** na frente do lote.
+- Filtros biológicos dos lagos e jardim filtrante/reuso devem ser observáveis no 3D.
 
 ## Linguagem visual
 
-Referência visual aprovada continua soberana:
+Meta: aproximar progressivamente o walkthrough das perspectivas de referência, sem falsificar as medidas:
 - aço/container grafite escuro;
-- madeira quente em decks, sacadas, escadas e mobiliário;
+- madeira quente em decks, sacadas, escadas e brises;
 - grandes panos de vidro com caixilhos pretos;
 - pilotis aberto;
-- cobertura independente com FV;
-- lagos naturais, pedras e vegetação de borda;
-- paisagismo produtivo denso;
-- móveis reconhecíveis em volumes funcionais, não cubos gigantes;
-- iluminação leve, sem point lights e sombras dinâmicas pesadas por padrão.
+- cobertura com FV e captação de chuva;
+- lagos orgânicos com pedras, plantas e deck;
+- paisagismo tropical/produtivo denso;
+- móveis reconhecíveis e em escala realista;
+- evitar cubos gigantes e objetos flutuando;
+- iluminação leve e performance estável.
 
 ## Performance
 
-- Produção v1.5: `app-v09.js` + `patch-v10.js` + `patch-v15-reality.js`.
+Produção v1.6: `app-v09.js` + `patch-v10.js` + `patch-v15-reality.js` + `patch-v16-bughunt.js` via `bootstrap-v16.js`.
+
 - Sombras dinâmicas desligadas.
-- DPR limitado a aproximadamente **0,88** por padrão.
-- FOV vertical: **60°**.
-- Raycast de feedback permanece restrito a elementos selecionáveis.
-- Evitar transmission/refração e pós-processamento caro.
+- DPR padrão limitado a aproximadamente **0,86**.
+- FOV vertical: **58°**.
+- Raycast de feedback restrito a elementos selecionáveis.
+- Evitar transmission/refração, pós-processamento caro e luzes pontuais em excesso.
 
-## QA v1.5
+## QA v1.6
 
-A cena expõe `window.__CASA_AUDIT_V15__`, conferindo pelo menos:
-- dimensões master 10 × 25 e 7,076 × 6,058;
-- sacadas frontal e traseira;
-- mobiliário recalibrado;
-- escadas separadas;
-- corredor livre no térreo;
-- 10 painéis FV;
-- 3 hortas verticais;
-- quantidade de árvores frutíferas;
-- sobreposição entre caminho, lagos, garagem, estufa e setores principais.
+A cena expõe `window.__CASA_AUDIT_V16__`, verificando:
+- presença de escadas externas;
+- guard contra troca involuntária de pavimento;
+- portas reais no íntimo;
+- frente reaproveitada;
+- painéis solares, cisterna, reservatório, sacadas e horta vertical;
+- sobreposição crítica entre horta frontal, lagos, garagem, cisterna, caminho, lounge, jardim filtrante e escadas.
 
 ## Regras permanentes
 
@@ -137,13 +152,13 @@ A cena expõe `window.__CASA_AUDIT_V15__`, conferindo pelo menos:
 2. Nunca alterar silenciosamente o corpo **7,076 × 6,058 m**.
 3. Social e íntimo sempre têm o mesmo envelope.
 4. O vão central **2,200 m** é área útil fechada.
-5. Sacadas e escadas externas não reduzem área interna.
+5. **Escadas e sacadas são externas e não consomem área interna.**
 6. A vaga não reserva piso desnecessário até a casa.
 7. Deve existir circulação pedestre contínua frente → fundos.
 8. Nenhum caminho pode passar por baixo ou através de lagos.
-9. Escadas precisam ser visualmente plausíveis e navegáveis.
-10. Mobiliário deve usar escala plausível de produto real e orientação funcional.
-11. Banheiros precisam ser completos e reconhecíveis.
+9. Caminhar fora da escada nunca pode mudar o pavimento da câmera.
+10. Mobiliário deve usar escala plausível e orientação funcional.
+11. Quartos e banheiros precisam ter portas/passagens reais e transitáveis.
 12. Nenhum mobiliário pode atravessar outro móvel, parede ou circulação principal.
 13. Sistemas sustentáveis precisam aparecer fisicamente no modelo.
 14. Mudança dimensional exige atualização conjunta deste master e do 3D.
