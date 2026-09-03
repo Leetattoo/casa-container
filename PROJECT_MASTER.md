@@ -10,12 +10,28 @@
 - Faixa central de **2,200 m**: fechada, útil e incorporada à moradia.
 - Parede externa de coordenação: **0,120 m**.
 - Área interna aproximada antes das divisórias: **6,836 × 5,818 = 39,772 m²**.
+- Os dois pavimentos habitáveis somam aproximadamente **79,544 m² internos antes das divisórias**.
 - 1 unidade Three.js = **1 metro**.
-- Pessoa de referência: **1,750 m**; olhos/câmera: **1,660 m**.
+- Referência humana de avaliação do walkthrough: **1,650 m**; olhos/câmera visual: aproximadamente **1,550 m**.
+- A física pode manter coordenadas internas compatíveis com o motor, mas a percepção visual deve representar o observador de 1,65 m sem alterar a métrica da casa.
 
-## v1.6 — heavy bug hunt / alinhamento incremental
+## v1.7 — auditoria espacial / escala / realismo
 
-A v1.6 mantém a base v1.5 e adiciona somente uma camada de correção estrutural (`patch-v16-bughunt.js`). O objetivo é eliminar bugs observados nos prints sem reescrever o modelo inteiro.
+A v1.7 mantém a cadeia validada v1.5/v1.6 e adiciona `patch-v17-spatial-audit.js`. O objetivo é corrigir a sensação falsa de aperto, paredes/colisões fantasmas, teleporte fora das escadas, mobiliário visualmente superdimensionado e paisagismo excessivamente central, sem aumentar artificialmente a casa.
+
+### Interpretação correta da área
+
+Um pavimento habitável possui aproximadamente **39,772 m² internos antes das divisórias**. Portanto, comparado a um ambiente de aproximadamente 32,5 m², ele é cerca de **22% maior**, e não deve parecer menor no walkthrough. A soma dos dois pavimentos habitáveis é que se aproxima de 80 m² internos.
+
+A sensação espacial deve ser corrigida por:
+- escala humana coerente;
+- FOV arquitetônico natural;
+- mobiliário em dimensões reais/compactas;
+- remoção de paredes e colisões legadas;
+- circulação efetivamente livre;
+- portas/vãos correspondendo às colisões.
+
+Nunca aumentar `7,076 × 6,058 m` para mascarar erro de modelagem.
 
 ### Regra permanente de escadas
 
@@ -23,8 +39,9 @@ A v1.6 mantém a base v1.5 e adiciona somente uma camada de correção estrutura
 - Nenhum lance, patamar ou vazio de escada pode consumir os **7,076 × 6,058 m** internos dos pavimentos.
 - Térreo → social: lance externo pela lateral direita.
 - Social → íntimo: segundo lance externo atrás da casa, fora da sacada traseira, ligado por patamar externo.
-- O bug em que caminhar no térreo sob a projeção XZ da escada superior fazia a câmera aparecer no andar de cima é considerado crítico e fica bloqueado por guard de nível.
-- 1/2/3 são somente atalhos; caminhar fora das escadas nunca pode alterar pavimento.
+- Caminhar no térreo sob a projeção da escada superior nunca pode alterar a câmera para outro pavimento.
+- A mudança de altura normal deve ocorrer somente sobre degrau/patamar válido.
+- 1/2/3 são somente atalhos manuais.
 
 ### Sacadas
 
@@ -68,7 +85,7 @@ Distribuição visual de referência:
 - sala frontal direita com sofá voltado para a TV;
 - portas/esquadrias amplas para sacadas frontal e traseira.
 
-Mobiliário permanece em escala plausível de produto real.
+Mobiliário permanece em escala plausível de produto real. Na v1.7, conjuntos sociais podem ser compactados quando estiverem superdimensionados, mas sem reduzir objetos cuja medida master já é real.
 
 ## Pavimento íntimo
 
@@ -79,9 +96,10 @@ Distribuição de referência:
 - escritório/gamer na frente direita;
 - banheiro íntimo nos fundos à direita.
 
-Regras v1.6:
-- divisória longitudinal precisa ter **portas reais** para quarto do casal e quarto dos filhos; não pode existir paredão contínuo bloqueando a circulação;
-- cama do casal deve estar orientada para dentro do quarto, com cabeceira em parede interna;
+Regras:
+- divisória longitudinal precisa ter **portas reais** para quarto do casal e quarto dos filhos;
+- cama do casal deve estar orientada para dentro do quarto;
+- cama queen permanece aproximadamente **1,58 × 1,98 m**;
 - quarto dos filhos usa **uma treliche com 3 camas sobrepostas**, footprint aproximado **0,92 × 2,00 m**;
 - bancada de estudo para 3 posições e armário compacto não podem bloquear portas;
 - gamer e banheiro permanecem fora da circulação principal.
@@ -101,7 +119,9 @@ O caminho lateral deve chegar aos fundos sem atravessar estufa, canteiro, árvor
 
 ## Pomar frutífero
 
-O conjunto inclui limão, laranja, acerola, pitanga, goiaba, mexerica, manga, jabuticaba, amora e banana, com árvores adicionais distribuídas no perímetro. Árvores não podem bloquear escadas, caminho, lagos, garagem ou sistemas de água.
+O conjunto inclui limão, laranja, acerola, pitanga, goiaba, mexerica, manga, jabuticaba, amora e banana.
+
+Regra v1.7: **os troncos devem permanecer predominantemente próximos aos muros/perímetro**, liberando o miolo do lote. Copas podem avançar visualmente para dentro, desde que não prejudiquem escada, acesso, caminho, lagos, garagem ou sistemas de água.
 
 ## Energia e água
 
@@ -122,29 +142,36 @@ Meta: aproximar progressivamente o walkthrough das perspectivas de referência, 
 - cobertura com FV e captação de chuva;
 - lagos orgânicos com pedras, plantas e deck;
 - paisagismo tropical/produtivo denso;
-- móveis reconhecíveis e em escala realista;
-- evitar cubos gigantes e objetos flutuando;
+- árvores com copas irregulares, não apenas esferas;
+- móveis reconhecíveis, arredondados quando apropriado e em escala realista;
+- materiais com variação/textura leve para evitar aparência de bloco/Minecraft;
+- evitar cubos gigantes, objetos flutuando e interseções;
 - iluminação leve e performance estável.
 
 ## Performance
 
-Produção v1.6: `app-v09.js` + `patch-v10.js` + `patch-v15-reality.js` + `patch-v16-bughunt.js` via `bootstrap-v16.js`.
+Produção v1.7: `app-v09.js` + `patch-v10.js` + `patch-v15-reality.js` + `patch-v16-bughunt.js` + `patch-v16-finalize.js` + `patch-v17-spatial-audit.js` via `bootstrap-v16.js`.
 
-- Sombras dinâmicas desligadas.
-- DPR padrão limitado a aproximadamente **0,86**.
-- FOV vertical: **58°**.
+- Sombras dinâmicas desligadas por padrão.
+- DPR padrão limitado a aproximadamente **0,90**.
+- FOV vertical de avaliação: aproximadamente **64°**.
 - Raycast de feedback restrito a elementos selecionáveis.
-- Evitar transmission/refração, pós-processamento caro e luzes pontuais em excesso.
+- Materiais procedurais leves são preferíveis a pós-processamento pesado.
+- Evitar transmission/refração cara e luzes pontuais em excesso.
 
-## QA v1.6
+## QA v1.7
 
-A cena expõe `window.__CASA_AUDIT_V16__`, verificando:
-- presença de escadas externas;
-- guard contra troca involuntária de pavimento;
-- portas reais no íntimo;
-- frente reaproveitada;
-- painéis solares, cisterna, reservatório, sacadas e horta vertical;
-- sobreposição crítica entre horta frontal, lagos, garagem, cisterna, caminho, lounge, jardim filtrante e escadas.
+A cena expõe `window.__CASA_AUDIT_V17__`, que deve incluir:
+- envelope da casa e área interna calculada;
+- referência humana de 1,65 m;
+- medidas observadas dos principais móveis;
+- IDs duplicados;
+- reparo de colisões interiores fantasmas;
+- proteção contra teleporte fora das escadas;
+- quantidade e posição perimetral das árvores frutíferas;
+- confirmação de que a casa não foi artificialmente redimensionada.
+
+A v1.6 continua expondo `window.__CASA_AUDIT_V16__` para implantação, sistemas, portas, escadas, frente e sobreposições críticas.
 
 ## Regras permanentes
 
@@ -160,6 +187,7 @@ A cena expõe `window.__CASA_AUDIT_V16__`, verificando:
 10. Mobiliário deve usar escala plausível e orientação funcional.
 11. Quartos e banheiros precisam ter portas/passagens reais e transitáveis.
 12. Nenhum mobiliário pode atravessar outro móvel, parede ou circulação principal.
-13. Sistemas sustentáveis precisam aparecer fisicamente no modelo.
-14. Mudança dimensional exige atualização conjunta deste master e do 3D.
-15. Estrutura, fundações, reforços, hidráulica, elétrica, vento, corrosão e legalização continuam conceituais até validação profissional.
+13. Árvores frutíferas devem priorizar o perímetro/muros, liberando o centro do lote.
+14. Sistemas sustentáveis precisam aparecer fisicamente no modelo.
+15. Mudança dimensional exige atualização conjunta deste master e do 3D.
+16. Estrutura, fundações, reforços, hidráulica, elétrica, vento, corrosão e legalização continuam conceituais até validação profissional.
