@@ -1,6 +1,6 @@
 # ACTIVE SCENE — CASA CONTRERAS
 
-Estado ativo após restauração da regressão do Work e evolução até a **v1.9 NAVIGATION AUTHORITY** em 03/09/2026.
+Estado ativo após restauração da regressão do Work e evolução até a **v1.12 LIGHTWEIGHT REALISM** em 03/09/2026.
 
 ## Cadeia obrigatória da produção
 
@@ -14,23 +14,26 @@ Estado ativo após restauração da regressão do Work e evolução até a **v1.
 6. `patch-v17-spatial-audit.js`
 7. `patch-v18-access-space.js`
 8. `patch-v19-navigation-authority.js`
+9. `patch-v20-navigation-preserve.js`
+10. `patch-v21-interior-functional-fit.js`
+11. `patch-v22-lightweight-realism.js`
 
 ## Regra crítica
 
 NÃO substituir esta cadeia por `app-v09.js` isolado.
 NÃO remover patches sem portar integralmente as correções existentes.
-
 O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base válida da produção.
 
-### Autoridade de navegação
+## Autoridade de navegação atual
 
-A partir da v1.9, `patch-v19-navigation-authority.js` é a **única autoridade de render/navegação vertical**.
+`patch-v20-navigation-preserve.js` é a camada final de navegação vertical.
 
-- Ele chama diretamente `THREE.WebGLRenderer.prototype.render`, portanto os wrappers antigos de `renderer.render` continuam carregados por compatibilidade histórica, mas são **bypassados**.
-- Eventos sintéticos legados `Digit1/2/3` ficam bloqueados.
-- A mudança automática de pavimento só pode ser autorizada pelo controlador v1.9 quando o jogador está fisicamente na zona X/Z **e na faixa Y correta** da escada correspondente.
-- Passar por baixo da escada superior no térreo não pode alterar pavimento.
-- `1/2/3` continuam disponíveis somente como atalhos manuais.
+- chama diretamente `THREE.WebGLRenderer.prototype.render`;
+- wrappers antigos ficam carregados apenas por compatibilidade, mas não comandam a renderização final;
+- mudança automática de nível exige X/Z e Y compatíveis com a escada real;
+- o estado interno do andar é atualizado sem deslocar a posição física do jogador para o centro do pavimento;
+- passar sob a escada superior no térreo não pode alterar pavimento;
+- `1/2/3` permanecem atalhos manuais.
 
 ## Estado dimensional protegido
 
@@ -47,27 +50,51 @@ A partir da v1.9, `patch-v19-navigation-authority.js` é a **única autoridade d
 ## Evolução recente
 
 ### v1.7
-- escala/percepção para observador de 1,65 m;
-- FOV arquitetônico ~64°;
-- mobiliário social compactado sem falsificar cama queen/treliche;
-- reparo de colisões interiores fantasmas;
-- árvores frutíferas deslocadas para o perímetro;
-- materiais procedurais leves e copas mais orgânicas.
+- escala/percepção 1,65 m;
+- FOV ~64°;
+- móveis sociais compactados;
+- colisões interiores fantasmas filtradas;
+- pomar levado ao perímetro;
+- materiais procedurais/copas mais orgânicas.
 
 ### v1.8
-- porta/vão social real alinhado à escada externa;
-- porta/vão íntimo real alinhado ao patamar/sacada traseira;
+- porta/vão social real;
+- porta/vão íntimo real;
 - quarto dos filhos redistribuído;
-- QA de sobreposições críticas.
+- QA de acessos/overlaps.
 
 ### v1.9
-- controlador único de escadas/altura;
-- wrappers antigos de render bypassados;
-- eventos sintéticos antigos de troca de pavimento bloqueados;
-- guarda-roupa do casal reposicionado dentro do envelope, na parede frontal e separado da cama;
-- QA de corredor social, corredor íntimo, overlaps, duplicidade de IDs e caminhos;
-- detalhes leves de água e iluminação embutida.
+- autoridade única de render/navegação;
+- eventos sintéticos legados bloqueados;
+- QA de corredores e duplicidade.
 
-A cena expõe `window.__CASA_AUDIT_V17__`, `window.__CASA_AUDIT_V18__`, `window.__CASA_AUDIT_V19__` e `window.__CASA_NAV_V19__`.
+### v1.10
+- troca do `activeLevel` sem teleporte físico;
+- posição preservada nos patamares;
+- navegação contínua nas duas escadas externas.
+
+### v1.11
+- sofá rotacionado para a TV;
+- mesa de centro movida para a frente do sofá;
+- quarto do casal redesenhado com queen centralizada e folgas reais (~0,63 m / ~0,64 m laterais e ~0,92 m no pé);
+- banheiro íntimo fechado corretamente, com porta de ~0,78 m para o corredor e collision boxes somente nas paredes reais.
+
+### v1.12
+- sombras de contato procedurais sem shadowMap;
+- galhos e áreas de mulch instanciados no pomar;
+- caminho lateral menos artificialmente uniforme;
+- brilho leve de vidro;
+- realismo aumentado com baixo impacto de draw calls.
+
+## QA runtime
+
+A cena expõe:
+- `window.__CASA_AUDIT_V17__`
+- `window.__CASA_AUDIT_V18__`
+- `window.__CASA_AUDIT_V19__`
+- `window.__CASA_AUDIT_V20__`
+- `window.__CASA_AUDIT_V21__`
+- `window.__CASA_AUDIT_V22__`
+- `window.__CASA_NAV_V20__`
 
 Antes de alterar `bootstrap-v16.js`, `app-v09.js` ou qualquer patch ativo, comparar com a produção e com `PROJECT_MASTER.md`.
