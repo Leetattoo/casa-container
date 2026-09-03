@@ -1,3 +1,5 @@
-// v1.7 intentionally loads one consolidated scene. The old patch chain created
-// duplicated furniture, stale collision boxes and overlapping stair systems.
-await import('./app-v09.js?v=20260903-v17');
+await import('./app-v09.js?v=20260903-v16b');
+await import('./patch-v10.js?v=20260903-v16b');
+await import('./patch-v15-reality.js?v=20260903-v16b');
+await import('./patch-v16-bughunt.js?v=20260903-v16b');
+await import('./patch-v16-finalize.js?v=20260903-v16b');
