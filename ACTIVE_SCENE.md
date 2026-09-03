@@ -1,6 +1,6 @@
 # ACTIVE SCENE — CASA CONTRERAS
 
-Estado ativo: **v1.15 HEAVY QA / ACCESS**.
+Estado ativo: **v1.16 REALISM UPGRADE**.
 
 ## Cadeia obrigatória da produção
 
@@ -19,6 +19,7 @@ Estado ativo: **v1.15 HEAVY QA / ACCESS**.
 11. `patch-v22-lightweight-realism.js`
 12. `patch-v24-access-circulation.js`
 13. `patch-v23-heavy-qa.js`
+14. `patch-v25-realism-upgrade.js`
 
 ## Regra crítica
 
@@ -40,7 +41,7 @@ O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base vál
 
 ## Navegação
 
-`patch-v20-navigation-preserve.js` é a autoridade final de navegação vertical.
+`patch-v20-navigation-preserve.js` continua sendo a autoridade final de navegação vertical.
 
 - wrappers antigos são bypassados no render final;
 - mudança automática de nível exige zona X/Z e faixa Y compatíveis com a escada real;
@@ -55,43 +56,48 @@ O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base vál
 - queen e guarda-roupa com folgas reais;
 - banheiro íntimo fechado com acesso pelo corredor;
 - quarto dos filhos com treliche, bancada e armário sem bloquear circulação;
-- mobiliário social compactado sem reduzir objetos já em medida real.
+- mobiliário social em medidas plausíveis; queen e treliche não são encolhidas artificialmente.
 
-## Acessos v1.14
+## Acessos
 
-`patch-v24-access-circulation.js` substitui os acessos v1.8 que caíam em ambientes errados.
+`patch-v24-access-circulation.js` mantém os acessos corretos:
 
-- entrada social: fachada traseira, na faixa de circulação entre cozinha e banheiro;
+- entrada social: fachada traseira, faixa de circulação entre cozinha e banheiro;
 - entrada íntima: fachada traseira, desembocando no corredor direito;
 - vão livre aproximado: 0,90 m;
 - passarelas externas ligam patamares/sacadas aos vãos;
-- fachada leste social volta a ser pano contínuo de vidro/estrutura;
+- fachada leste social permanece pano de vidro/estrutura;
 - colisão legada é ignorada apenas no volume exato dos portais.
 
-## Realismo leve
+## QA
 
-- materiais procedurais leves;
-- sombras de contato falsas, sem shadowMap dinâmico;
-- galhos e mulch instanciados;
-- caminho menos uniforme;
-- vidro com brilho leve;
-- árvores frutíferas priorizam o perímetro.
+`patch-v23-heavy-qa.js` mantém o painel técnico pela tecla **K** e expõe `window.__CASA_AUDIT_V23__`.
 
-## QA v1.15
-
-`patch-v23-heavy-qa.js` roda por último e expõe `window.__CASA_AUDIT_V23__`.
-
-A tecla **K** abre painel técnico com:
+O painel verifica:
 - overlaps críticos;
-- bloqueios de circulação social/íntima;
-- bloqueios dos dois portais traseiros;
-- árvores longe do muro ou próximas do caminho/escada;
-- objetos principais fora do lote;
-- IDs duplicados;
-- transforms inválidos;
-- folgas do quarto do casal e área social;
-- estado da navegação e resultado do `__CASA_AUDIT_V24__`.
+- corredores social/íntimo;
+- portais traseiros;
+- escala observada dos principais móveis;
+- árvores, caminho e escadas;
+- objetos fora do lote;
+- IDs duplicados e transforms inválidos;
+- navegação e folgas do quarto do casal.
 
-A revisão não deve ser considerada estável se o painel K indicar falhas críticas.
+## Realismo v1.16
 
-Antes de alterar `bootstrap-v16.js`, `app-v09.js` ou qualquer patch ativo, comparar com a produção e com `PROJECT_MASTER.md`.
+`patch-v25-realism-upgrade.js` é **somente visual**. Ele NÃO altera layout, área, paredes, acessos, escadas ou posição funcional dos móveis.
+
+A camada adiciona/refina:
+- ACES + exposição/iluminação diurna recalibradas;
+- microtexturas procedurais de madeira, reboco, aço e tecido;
+- vidro menos leitoso/plástico;
+- água dos dois lagos com clearcoat, profundidade aparente e bump animado leve;
+- corrugação e perfis do container via **InstancedMesh**;
+- rodapés e microdetalhes da cozinha;
+- grama 3D em instancing, fora das áreas de circulação/lago/vaga;
+- folhagem fina instanciada nas árvores frutíferas;
+- sombras dinâmicas continuam desligadas para proteger FPS.
+
+A camada expõe `window.__CASA_AUDIT_V25__` e deve manter `geometryLayoutChanged:false`.
+
+Antes de alterar `bootstrap-v16.js`, `app-v09.js` ou qualquer patch ativo, comparar com a produção, `PROJECT_MASTER.md` e este arquivo.
