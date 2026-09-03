@@ -1,6 +1,6 @@
 # ACTIVE SCENE — CASA CONTRERAS
 
-Estado ativo após restauração da regressão do Work e evolução até a **v1.12 LIGHTWEIGHT REALISM** em 03/09/2026.
+Estado ativo: **v1.15 HEAVY QA / ACCESS**.
 
 ## Cadeia obrigatória da produção
 
@@ -17,25 +17,16 @@ Estado ativo após restauração da regressão do Work e evolução até a **v1.
 9. `patch-v20-navigation-preserve.js`
 10. `patch-v21-interior-functional-fit.js`
 11. `patch-v22-lightweight-realism.js`
+12. `patch-v24-access-circulation.js`
+13. `patch-v23-heavy-qa.js`
 
 ## Regra crítica
 
 NÃO substituir esta cadeia por `app-v09.js` isolado.
 NÃO remover patches sem portar integralmente as correções existentes.
-O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base válida da produção.
+O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base válida.
 
-## Autoridade de navegação atual
-
-`patch-v20-navigation-preserve.js` é a camada final de navegação vertical.
-
-- chama diretamente `THREE.WebGLRenderer.prototype.render`;
-- wrappers antigos ficam carregados apenas por compatibilidade, mas não comandam a renderização final;
-- mudança automática de nível exige X/Z e Y compatíveis com a escada real;
-- o estado interno do andar é atualizado sem deslocar a posição física do jogador para o centro do pavimento;
-- passar sob a escada superior no térreo não pode alterar pavimento;
-- `1/2/3` permanecem atalhos manuais.
-
-## Estado dimensional protegido
+## Geometria protegida
 
 - lote: 10,000 × 25,000 m
 - corpo de cada pavimento: 7,076 × 6,058 m
@@ -47,54 +38,60 @@ O commit regressivo `0b15f8741fe23e782305f3b5172d72f65cb0559d` não é base vál
 - 1 unidade Three.js = 1 metro
 - referência humana: 1,65 m; olhos visuais ~1,55 m
 
-## Evolução recente
+## Navegação
 
-### v1.7
-- escala/percepção 1,65 m;
-- FOV ~64°;
-- móveis sociais compactados;
-- colisões interiores fantasmas filtradas;
-- pomar levado ao perímetro;
-- materiais procedurais/copas mais orgânicas.
+`patch-v20-navigation-preserve.js` é a autoridade final de navegação vertical.
 
-### v1.8
-- porta/vão social real;
-- porta/vão íntimo real;
-- quarto dos filhos redistribuído;
-- QA de acessos/overlaps.
+- wrappers antigos são bypassados no render final;
+- mudança automática de nível exige zona X/Z e faixa Y compatíveis com a escada real;
+- trocar o estado interno do andar não move X/Z do jogador;
+- passar sob a escada superior no térreo não altera pavimento;
+- 1/2/3 são atalhos manuais.
 
-### v1.9
-- autoridade única de render/navegação;
-- eventos sintéticos legados bloqueados;
-- QA de corredores e duplicidade.
+## Layout funcional
 
-### v1.10
-- troca do `activeLevel` sem teleporte físico;
-- posição preservada nos patamares;
-- navegação contínua nas duas escadas externas.
+- sofá voltado para TV;
+- mesa de centro entre sofá e TV;
+- queen e guarda-roupa com folgas reais;
+- banheiro íntimo fechado com acesso pelo corredor;
+- quarto dos filhos com treliche, bancada e armário sem bloquear circulação;
+- mobiliário social compactado sem reduzir objetos já em medida real.
 
-### v1.11
-- sofá rotacionado para a TV;
-- mesa de centro movida para a frente do sofá;
-- quarto do casal redesenhado com queen centralizada e folgas reais (~0,63 m / ~0,64 m laterais e ~0,92 m no pé);
-- banheiro íntimo fechado corretamente, com porta de ~0,78 m para o corredor e collision boxes somente nas paredes reais.
+## Acessos v1.14
 
-### v1.12
-- sombras de contato procedurais sem shadowMap;
-- galhos e áreas de mulch instanciados no pomar;
-- caminho lateral menos artificialmente uniforme;
-- brilho leve de vidro;
-- realismo aumentado com baixo impacto de draw calls.
+`patch-v24-access-circulation.js` substitui os acessos v1.8 que caíam em ambientes errados.
 
-## QA runtime
+- entrada social: fachada traseira, na faixa de circulação entre cozinha e banheiro;
+- entrada íntima: fachada traseira, desembocando no corredor direito;
+- vão livre aproximado: 0,90 m;
+- passarelas externas ligam patamares/sacadas aos vãos;
+- fachada leste social volta a ser pano contínuo de vidro/estrutura;
+- colisão legada é ignorada apenas no volume exato dos portais.
 
-A cena expõe:
-- `window.__CASA_AUDIT_V17__`
-- `window.__CASA_AUDIT_V18__`
-- `window.__CASA_AUDIT_V19__`
-- `window.__CASA_AUDIT_V20__`
-- `window.__CASA_AUDIT_V21__`
-- `window.__CASA_AUDIT_V22__`
-- `window.__CASA_NAV_V20__`
+## Realismo leve
+
+- materiais procedurais leves;
+- sombras de contato falsas, sem shadowMap dinâmico;
+- galhos e mulch instanciados;
+- caminho menos uniforme;
+- vidro com brilho leve;
+- árvores frutíferas priorizam o perímetro.
+
+## QA v1.15
+
+`patch-v23-heavy-qa.js` roda por último e expõe `window.__CASA_AUDIT_V23__`.
+
+A tecla **K** abre painel técnico com:
+- overlaps críticos;
+- bloqueios de circulação social/íntima;
+- bloqueios dos dois portais traseiros;
+- árvores longe do muro ou próximas do caminho/escada;
+- objetos principais fora do lote;
+- IDs duplicados;
+- transforms inválidos;
+- folgas do quarto do casal e área social;
+- estado da navegação e resultado do `__CASA_AUDIT_V24__`.
+
+A revisão não deve ser considerada estável se o painel K indicar falhas críticas.
 
 Antes de alterar `bootstrap-v16.js`, `app-v09.js` ou qualquer patch ativo, comparar com a produção e com `PROJECT_MASTER.md`.
