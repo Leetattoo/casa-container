@@ -13,9 +13,6 @@ function tag(o,id,label,category='Acabamento'){o.userData={...o.userData,id,labe
 function box(parent,w,h,d,x,y,z,mat,rot=0){const m=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),mat);m.scale.set(w,h,d);m.position.set(x,y,z);m.rotation.y=rot;m.castShadow=false;m.receiveShadow=false;parent.add(m);return m;}
 function seeded(seed=1337){let s=seed>>>0;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296);}
 
-// ---------------------------------------------------------------------------
-// 1) PIPELINE DE COR / LUZ — sem shadowMap dinâmico.
-// ---------------------------------------------------------------------------
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.04;
@@ -29,9 +26,6 @@ hemis.forEach((l,i)=>{l.color.set(i?0xd8e7eb:0xdcecf0);l.groundColor.set(0x59624
 dirs.sort((a,b)=>b.intensity-a.intensity);
 dirs.forEach((l,i)=>{l.castShadow=false;if(i===0){l.color.set(0xffd7aa);l.intensity=2.25;l.position.set(-11,18,-13);}else{l.color.set(0xcadcf2);l.intensity=.34;l.position.set(9,8,11);}});
 
-// ---------------------------------------------------------------------------
-// 2) MICROTEXTURAS PROCEDURAIS: bump/roughness, sem downloads externos.
-// ---------------------------------------------------------------------------
 function textureCanvas(kind,size=256){
   const c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d'),rnd=seeded(kind.split('').reduce((a,v)=>a+v.charCodeAt(0),0)*97+17);
   x.fillStyle='#808080';x.fillRect(0,0,size,size);
@@ -59,7 +53,6 @@ for(const m of mats){
   if(!m.color||m.isMeshBasicMaterial)continue;
   const {r,g,b}=m.color;const metalness=m.metalness??0,rough=m.roughness??1;
   if(m.transparent&&m.opacity<.55){
-    // Vidro arquitetônico: menos plástico/leitoso.
     if(b>=g*.86&&g>=r*.82){m.opacity=Math.min(m.opacity,.21);if('roughness'in m)m.roughness=.10;if('metalness'in m)m.metalness=.02;if('envMapIntensity'in m)m.envMapIntensity=1.2;m.depthWrite=false;materialStats.glass++;}
     continue;
   }
@@ -76,9 +69,6 @@ for(const m of mats){
   m.needsUpdate=true;
 }
 
-// ---------------------------------------------------------------------------
-// 3) ÁGUA: clearcoat, profundidade aparente e ondulação lenta.
-// ---------------------------------------------------------------------------
 removeId('AGUA-REALISMO-V25');
 const waterDetail=tag(new THREE.Group(),'AGUA-REALISMO-V25','Profundidade e acabamento dos lagos','Água');scene.add(waterDetail);
 const waterMat=new THREE.MeshPhysicalMaterial({color:0x2b8085,transparent:true,opacity:.67,roughness:.13,metalness:.02,clearcoat:1,clearcoatRoughness:.08,bumpMap:bump.water,bumpScale:.025,depthWrite:false,side:THREE.DoubleSide});
@@ -92,35 +82,21 @@ for(const [id,mat] of[['LAGO-NATURAL-V15',waterMat],['LAGO-PEIXES-V15',fishWater
 }
 let waveFrame=0;function animateWater(){waveFrame++;if(waveFrame%2===0){bump.water.offset.x=(bump.water.offset.x+.00042)%1;bump.water.offset.y=(bump.water.offset.y+.00018)%1;}requestAnimationFrame(animateWater);}requestAnimationFrame(animateWater);
 
-// ---------------------------------------------------------------------------
-// 4) CORRUGAÇÃO E PERFIS: container deixa de parecer caixa lisa.
-// ---------------------------------------------------------------------------
 removeId('CORRUGACAO-CONTAINER-V25');
 const ribs=tag(new THREE.Group(),'CORRUGACAO-CONTAINER-V25','Corrugação e perfis do container','Fachada');scene.add(ribs);
 const ribMat=new THREE.MeshStandardMaterial({color:0x1e2825,roughness:.39,metalness:.68,bumpMap:bump.metal,bumpScale:.004});
 let ribCount=0;
-function ribPanel(y,z,side){
-  const x0=side<0?-halfW+.10:halfW-.78,x1=side<0?-halfW+.78:halfW-.10;
-  for(let x=x0;x<=x1+.001;x+=.105){box(ribs,.018,2.36,.024,x,y+1.19,z,ribMat);ribCount++;}
-}
+function ribPanel(y,z,side){const x0=side<0?-halfW+.10:halfW-.78,x1=side<0?-halfW+.78:halfW-.10;for(let x=x0;x<=x1+.001;x+=.105){box(ribs,.018,2.36,.024,x,y+1.19,z,ribMat);ribCount++;}}
 for(const y of[LEVEL.social,LEVEL.private]){ribPanel(y,front+.035,-1);ribPanel(y,front+.035,1);ribPanel(y,back-.035,-1);ribPanel(y,back-.035,1);}
-// Perfis horizontais finos que dão escala construtiva.
 for(const y of[LEVEL.social,LEVEL.private])for(const z of[front+.05,back-.05]){box(ribs,HOUSE.w-.18,.035,.035,0,y+.08,z,ribMat);box(ribs,HOUSE.w-.18,.035,.035,0,y+2.42,z,ribMat);ribCount+=2;}
 
-// ---------------------------------------------------------------------------
-// 5) RODAPÉS + COZINHA: microdetalhes de leitura humana.
-// ---------------------------------------------------------------------------
 removeId('MICRODETALHES-INTERIOR-V25');
 const details=tag(new THREE.Group(),'MICRODETALHES-INTERIOR-V25','Rodapés e detalhes interiores','Interior');scene.add(details);
 const baseMat=new THREE.MeshStandardMaterial({color:0x383c38,roughness:.52,metalness:.18});
 const chrome=new THREE.MeshStandardMaterial({color:0xb9c2c0,roughness:.15,metalness:.90});
 const dark=new THREE.MeshStandardMaterial({color:0x171c1b,roughness:.35,metalness:.32});
 let detailCount=0;
-for(const y of[LEVEL.social,LEVEL.private]){
-  box(details,HOUSE.w-.30,.065,.035,0,y+.034,front+.14,baseMat);box(details,HOUSE.w-.30,.065,.035,0,y+.034,back-.14,baseMat);detailCount+=2;
-  for(const x of[-halfW+.14,halfW-.14]){box(details,.035,.065,HOUSE.d-.32,x,y+.034,HOUSE.centerZ,baseMat);detailCount++;}
-}
-// Cozinha: puxadores, rodapé técnico, cuba escura e torneira mais legível.
+for(const y of[LEVEL.social,LEVEL.private]){box(details,HOUSE.w-.30,.065,.035,0,y+.034,front+.14,baseMat);box(details,HOUSE.w-.30,.065,.035,0,y+.034,back-.14,baseMat);detailCount+=2;for(const x of[-halfW+.14,halfW-.14]){box(details,.035,.065,HOUSE.d-.32,x,y+.034,HOUSE.centerZ,baseMat);detailCount++;}}
 const kitchen=byId('COZINHA-V15');if(kitchen){
   box(details,2.22,.09,.035,-2.05,LEVEL.social+.095,2.91,dark);detailCount++;
   for(const x of[-2.80,-2.31,-1.82,-1.33]){box(details,.012,.24,.018,x,LEVEL.social+.54,2.905,chrome);detailCount++;}
@@ -129,17 +105,14 @@ const kitchen=byId('COZINHA-V15');if(kitchen){
   const spout=new THREE.Mesh(new THREE.TorusGeometry(.115,.012,8,20,Math.PI),chrome);spout.rotation.x=Math.PI/2;spout.rotation.z=Math.PI/2;spout.position.set(-1.40,LEVEL.social+1.17,3.19);details.add(spout);detailCount++;
 }
 
-// ---------------------------------------------------------------------------
-// 6) GRAMA DE PRIMEIRO PLANO INSTANCIADA: tira efeito de tapete plano.
-// ---------------------------------------------------------------------------
 removeId('GRAMA-3D-V25');
 const grassRoot=tag(new THREE.Group(),'GRAMA-3D-V25','Grama 3D instanciada','Paisagismo');scene.add(grassRoot);
-const bladeGeo=new THREE.ConeGeometry(.018,.15,.018,3);
+const bladeGeo=new THREE.ConeGeometry(.018,.15,3,1,false);
 const bladeMatA=new THREE.MeshLambertMaterial({color:0x4e7443,side:THREE.DoubleSide});
 const bladeMatB=new THREE.MeshLambertMaterial({color:0x668452,side:THREE.DoubleSide});
 const rnd=seeded(25162026),bladeData=[[],[]];
 for(let i=0;i<520;i++){
-  let x=-4.75+rnd()*9.50,z=-12.10+rnd()*24.20;
+  const x=-4.75+rnd()*9.50,z=-12.10+rnd()*24.20;
   const inHouse=x>-4.15&&x<4.55&&z>front-1.8&&z<back+1.8;
   const inParking=x>.85&&z<-6.45;
   const inLeftPath=x>-4.72&&x<-3.72&&z>-11.3&&z<11.6;
@@ -147,13 +120,8 @@ for(let i=0;i<520;i++){
   if(inHouse||inParking||inLeftPath||nearPond){i--;continue;}
   bladeData[i%2].push({x,z,s:.75+rnd()*.70,r:rnd()*Math.PI});
 }
-for(let v=0;v<2;v++){
-  const arr=bladeData[v],inst=new THREE.InstancedMesh(bladeGeo,v?bladeMatB:bladeMatA,arr.length),d=new THREE.Object3D();arr.forEach((q,i)=>{d.position.set(q.x,.075*q.s,q.z);d.rotation.set((rnd()-.5)*.14,q.r,(rnd()-.5)*.14);d.scale.set(1,q.s,1);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;inst.castShadow=false;grassRoot.add(inst);
-}
+for(let v=0;v<2;v++){const arr=bladeData[v],inst=new THREE.InstancedMesh(bladeGeo,v?bladeMatB:bladeMatA,arr.length),d=new THREE.Object3D();arr.forEach(q=>{d.position.set(q.x,.075*q.s,q.z);d.rotation.set((rnd()-.5)*.14,q.r,(rnd()-.5)*.14);d.scale.set(1,q.s,1);d.updateMatrix();inst.setMatrixAt(arr.indexOf(q),d.matrix);});inst.instanceMatrix.needsUpdate=true;inst.castShadow=false;grassRoot.add(inst);}
 
-// ---------------------------------------------------------------------------
-// 7) POMAR: pequenos cachos de folhas dão borda menos esférica.
-// ---------------------------------------------------------------------------
 removeId('FOLHAGEM-FINA-V25');
 const foliage=tag(new THREE.Group(),'FOLHAGEM-FINA-V25','Folhagem fina do pomar','Paisagismo');scene.add(foliage);
 const trees=[];scene.traverse(o=>{if(o.userData?.category==='Árvore frutífera')trees.push(o);});
@@ -162,24 +130,7 @@ const leafData=[[],[]];
 trees.forEach((t,ti)=>{const p=t.getWorldPosition(new THREE.Vector3());for(let k=0;k<5;k++){const a=(k/5)*Math.PI*2+ti*.41,rr=.38+(k%2)*.13;leafData[(ti+k)%2].push({x:p.x+Math.cos(a)*rr,y:p.y+1.45+(k%3)*.14,z:p.z+Math.sin(a)*rr,s:.16+(k%3)*.025,r:a});}});
 for(let v=0;v<2;v++){const arr=leafData[v],inst=new THREE.InstancedMesh(leafGeo,v?leafMatB:leafMatA,arr.length),d=new THREE.Object3D();arr.forEach((q,i)=>{d.position.set(q.x,q.y,q.z);d.scale.set(q.s,q.s*.72,q.s*.92);d.rotation.set(i*.21,q.r,i*.11);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;foliage.add(inst);}
 
-// ---------------------------------------------------------------------------
-// 8) QA: realismo sem alteração métrica.
-// ---------------------------------------------------------------------------
-const audit={
-  version:'v1.16-realism-upgrade',
-  dimensionsPreserved:{lot:[10,25],house:[7.076,6.058],human:1.65},
-  renderer:{toneMapping:'ACESFilmic',exposure:renderer.toneMappingExposure,dprCap:.94,dynamicShadows:false},
-  lights:{hemisphere:hemis.length,directional:dirs.length},
-  materials:materialStats,
-  waterBodiesUpgraded:upgradedWater,
-  containerRibs:ribCount,
-  interiorMicroDetails:detailCount,
-  grassInstances:bladeData[0].length+bladeData[1].length,
-  fruitTrees:trees.length,
-  fineLeafInstances:leafData[0].length+leafData[1].length,
-  geometryLayoutChanged:false,
-  pass:upgradedWater>=2&&ribCount>20&&detailCount>8&&trees.length>0&&(bladeData[0].length+bladeData[1].length)>=400
-};
+const audit={version:'v1.16-realism-upgrade',dimensionsPreserved:{lot:[10,25],house:[7.076,6.058],human:1.65},renderer:{toneMapping:'ACESFilmic',exposure:renderer.toneMappingExposure,dprCap:.94,dynamicShadows:false},lights:{hemisphere:hemis.length,directional:dirs.length},materials:materialStats,waterBodiesUpgraded:upgradedWater,containerRibs:ribCount,interiorMicroDetails:detailCount,grassInstances:bladeData[0].length+bladeData[1].length,fruitTrees:trees.length,fineLeafInstances:leafData[0].length+leafData[1].length,geometryLayoutChanged:false,pass:upgradedWater>=2&&ribCount>20&&detailCount>8&&trees.length>0&&(bladeData[0].length+bladeData[1].length)>=400};
 window.__CASA_AUDIT_V25__=audit;
 console.info('[Casa Contreras] AUDIT v1.16 REALISM',audit);
 const top=document.getElementById('topbar');if(top)top.innerHTML=`<b>CASA CONTRERAS — v1.16 REALISM UPGRADE</b><br><span class="muted">microtexturas PBR leves • água com clearcoat/ondas • vidro refinado • corrugação de container • grama 3D instanciada • folhagem fina • rodapés e cozinha detalhada • iluminação ACES recalibrada<br>7,076 × 6,058 m • referência humana 1,65 m • nenhuma geometria arquitetônica foi redimensionada • K mantém QA técnico</span>`;
