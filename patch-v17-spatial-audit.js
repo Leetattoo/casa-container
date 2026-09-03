@@ -24,8 +24,16 @@ if(gauge){gauge.scale.y*=USER_HEIGHT/1.750;gauge.userData.label='Referência hum
 
 let manualLevelUntil=0;
 addEventListener('keydown',e=>{if(/^Digit[123]$/.test(e.code))manualLevelUntil=performance.now()+650;});
-function inLowerStair(p){return p.x>3.50&&p.x<4.72&&p.z>-2.10&&p.z<3.55;}
-function inUpperStair(p){return p.z>4.85&&p.z<6.10&&p.x>-2.10&&p.x<3.65;}
+function inLowerStair(p){
+  const xz=p.x>3.50&&p.x<4.72&&p.z>-2.10&&p.z<3.55;
+  const y=p.y>USER_EYE-.30&&p.y<LEVEL.social+PHYSICAL_EYE+.45;
+  return xz&&y;
+}
+function inUpperStair(p){
+  const xz=p.z>4.85&&p.z<6.10&&p.x>-2.10&&p.x<3.65;
+  const y=p.y>LEVEL.social+PHYSICAL_EYE-.55&&p.y<LEVEL.private+PHYSICAL_EYE+.45;
+  return xz&&y;
+}
 function onStair(p){return inLowerStair(p)||inUpperStair(p);}
 
 if(!window.__CASA_V17_RENDER_GUARD__){
@@ -38,7 +46,7 @@ if(!window.__CASA_V17_RENDER_GUARD__){
     const stairBefore=onStair(before);
     if(!manual&&!stairBefore&&Math.abs(before.y-lastSafe.y)>1.15)c.position.copy(lastSafe);
 
-    // Em escada, o wrapper v1.5/v1.6 continua soberano e pode alterar Y/X/Z.
+    // Nas escadas reais, o wrapper geométrico v1.5/v1.6 continua soberano.
     if(onStair(c.position)){
       prev(s,c);
       lastSafe.copy(c.position);
@@ -57,7 +65,7 @@ if(!window.__CASA_V17_RENDER_GUARD__){
       c.position.copy(lastSafe);
       return;
     }
-    // O rebaixamento de 11 cm é somente visual; física permanece estável.
+    // O rebaixamento visual não altera a física/cotas do mundo.
     c.position.x=physical.x;c.position.z=physical.z;c.position.y=physical.y;
     lastSafe.copy(c.position);
   };
@@ -106,22 +114,24 @@ const scaled={
   gourmetTable:scaleRoot('MESA-GOURMET-V15',.91,.98),
   gourmet:scaleRoot('GOURMET-V15',.95,.99),
   gamer:scaleRoot('GAMER-V15',.93,.98),
-  kidsDesk:scaleRoot('BANCADA-FILHOS-V15',.94,.98)
+  kidsDesk:scaleRoot('BANCADA-FILHOS-V16',.94,.98)
 };
 for(const o of all(o=>/^CAD-(JANTAR|G)-V15-/.test(o.userData?.id||'')||/^BANQUETA-V15-/.test(o.userData?.id||'')))o.scale.multiply(new THREE.Vector3(.90,.98,.90));
+// Cama queen 1,58 x 1,98 e treliche 0,92 x 2,00 não são reduzidas.
 
-// 4) Pomar: troncos junto ao muro/perímetro, sem ocupar o miolo do terreno.
+// 4) Pomar: troncos realmente próximos ao muro, mas fora da faixa física do caminho.
 const trees=all(o=>o.userData?.category==='Árvore frutífera');
 for(const t of trees){
   const wp=t.getWorldPosition(new THREE.Vector3());
-  if(wp.z>10.25)t.position.z=11.80;
-  else if(wp.x<-1.45)t.position.x=-4.55;
-  else if(wp.x>1.45)t.position.x=4.55;
-  if(t.position.x>4.2&&t.position.z>-2.25&&t.position.z<3.65)t.position.z=t.position.z<.7?-4.20:4.35;
+  if(wp.z>10.25)t.position.z=12.20;
+  else if(wp.x<-1.45)t.position.x=-4.75;
+  else if(wp.x>1.45)t.position.x=4.75;
+  // Mantém escada lateral direita livre.
+  if(t.position.x>4.55&&t.position.z>-2.25&&t.position.z<3.65)t.position.z=t.position.z<.7?-4.20:4.35;
   t.updateMatrixWorld(true);
 }
 
-// Copas adicionais instanciadas: silhueta orgânica com baixo custo.
+// Copas lobuladas adicionais: silhueta orgânica com baixo custo.
 const canopyGeo=new THREE.SphereGeometry(1,12,8);
 const canopyMatA=new THREE.MeshLambertMaterial({color:0x315f38});
 const canopyMatB=new THREE.MeshLambertMaterial({color:0x497b45});
@@ -144,6 +154,12 @@ scene.traverse(o=>{if(!o.isMesh)return;const mats=Array.isArray(o.material)?o.ma
   else if(r<70&&g<80&&b<85&&(m.metalness??0)>.35){m.map=tex.steel;m.roughness=.42;m.needsUpdate=true;}
   else if(r>185&&g>180&&b>165&&(m.metalness??0)<.2){m.map=tex.wall;m.roughness=Math.max(m.roughness??.7,.78);m.needsUpdate=true;}
 }}
+
+// Atmosfera/sky dome leve: melhora profundidade sem pós-processamento.
+const oldSky=byId('SKY-V17');if(oldSky?.parent)oldSky.parent.remove(oldSky);
+const skyMat=new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{top:{value:new THREE.Color(0x8fb9cc)},bottom:{value:new THREE.Color(0xe7d4bd)}},vertexShader:`varying float vY;void main(){vec4 w=modelMatrix*vec4(position,1.0);vY=normalize(w.xyz).y;gl_Position=projectionMatrix*viewMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform vec3 top;uniform vec3 bottom;varying float vY;void main(){float h=smoothstep(-.18,.72,vY);gl_FragColor=vec4(mix(bottom,top,h),1.0);}`});
+const sky=new THREE.Mesh(new THREE.SphereGeometry(68,24,12),skyMat);sky.userData={id:'SKY-V17',label:'Céu arquitetônico leve'};scene.add(sky);
+scene.background=null;
 renderer.toneMappingExposure=1.10;
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,.90));
 
@@ -152,18 +168,19 @@ function measure(id){const o=byId(id);if(!o)return null;const s=bsize(boxOf(o));
 const duplicateMap=new Map();scene.traverse(o=>{const id=o.userData?.id;if(id)duplicateMap.set(id,(duplicateMap.get(id)||0)+1);});
 const duplicateIds=[...duplicateMap].filter(([,n])=>n>1).map(([id,n])=>`${id}:${n}`);
 const treeWallDistances=trees.map(t=>{const p=t.getWorldPosition(new THREE.Vector3());return Math.min(4.94-Math.abs(p.x),12.44-Math.abs(p.z));});
-const furniture={island:measure('ILHA-V15'),dining:measure('JANTAR-V15'),sofa:measure('SOFA-V15'),queen:measure('CAMA-CASAL-V15'),bunk:measure('TRELICHE-V15'),gamer:measure('GAMER-V15')};
+const furniture={island:measure('ILHA-V15'),dining:measure('JANTAR-V15'),sofa:measure('SOFA-V15'),queen:measure('CAMA-CASAL-V16'),bunk:measure('TRELICHE-V16'),kidsDesk:measure('BANCADA-FILHOS-V16'),gamer:measure('GAMER-V15')};
+const furniturePresent=Object.entries(furniture).filter(([k])=>!['gamer'].includes(k)).every(([,v])=>Array.isArray(v));
 const audit={
   version:'v1.7-spatial-realism',
   dimensions:{house:[HOUSE.w,HOUSE.d],grossArea:+(HOUSE.w*HOUSE.d).toFixed(3),clear:[+innerW.toFixed(3),+innerD.toFixed(3)],clearArea:+clearArea.toFixed(3),twoLivingFloorsApprox:+(clearArea*2).toFixed(3)},
   userReference:{height:USER_HEIGHT,visualEye:USER_EYE,physicalCollisionApprox:{height:1.65,width:.46},fov:camera.fov},
-  furniture,scaled,fruitTrees:trees.length,
-  orchard:{maxTrunkDistanceFromNearestWall:+Math.max(...treeWallDistances).toFixed(2),target:'troncos próximos ao perímetro; copas podem sombrear circulação'},
+  furniture,scaled,furniturePresent,fruitTrees:trees.length,
+  orchard:{maxTrunkDistanceFromNearestWall:+Math.max(...treeWallDistances).toFixed(2),target:'troncos próximos ao perímetro; caminho e escadas livres'},
   visibleInteriorWallCollisionBoxes:currentWalls.length,
-  ghostInteriorCollisionRepair:true,teleportGuard:true,duplicateIds,
-  pass:duplicateIds.length===0&&Math.abs(clearArea-39.772)<.03
+  ghostInteriorCollisionRepair:true,teleportGuard:true,stairHeightGuards:true,proceduralMaterials:true,skyDome:true,duplicateIds,
+  pass:duplicateIds.length===0&&furniturePresent&&Math.abs(clearArea-39.772)<.03
 };
 window.__CASA_AUDIT_V17__=audit;
 console.info('[Casa Contreras] AUDIT v1.7',audit);
-const top=document.getElementById('topbar');if(top)top.innerHTML=`<b>CASA CONTRERAS — v1.7 SPATIAL / REALISM AUDIT</b><br><span class="muted">referência humana 1,65 m • olhos ~1,55 m • FOV 64° • colisão corporal ~46 cm • móveis sociais compactados • paredes fantasmas filtradas • pomar junto ao muro • materiais procedurais leves<br>casa 7,076 × 6,058 m • ~${clearArea.toFixed(2)} m² internos/pavimento antes das divisórias • ~${(clearArea*2).toFixed(2)} m² nos 2 pavimentos habitáveis</span>`;
+const top=document.getElementById('topbar');if(top)top.innerHTML=`<b>CASA CONTRERAS — v1.7 SPATIAL / REALISM AUDIT</b><br><span class="muted">referência humana 1,65 m • olhos ~1,55 m • FOV 64° • colisão corporal ~46 cm • móveis sociais compactados • paredes fantasmas filtradas • árvores junto ao muro • materiais procedurais + atmosfera leve<br>casa 7,076 × 6,058 m • ~${clearArea.toFixed(2)} m² internos/pavimento antes das divisórias • ~${(clearArea*2).toFixed(2)} m² nos 2 pavimentos habitáveis</span>`;
 const note=document.querySelector('#start .note');if(note)note.textContent=`v1.7: auditoria espacial. Um pavimento possui ~${clearArea.toFixed(2)} m² internos antes das divisórias; os dois habitáveis somam ~${(clearArea*2).toFixed(2)} m². A escala da casa não foi aumentada.`;
