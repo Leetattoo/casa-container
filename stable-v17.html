@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <meta name="theme-color" content="#0b0d0f" />
+  <title>Casa Contreras — v1.17 Stable</title>
+  <link rel="stylesheet" href="./style.css?v=stable17a" />
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+</head>
+<body>
+  <div id="hud"><div id="crosshair"></div><div id="topbar"><b>CASA CONTRERAS — CARREGANDO v1.17 STABLE...</b></div><div id="selected"></div></div>
+  <div id="start"><div class="card">
+    <p class="eyebrow">CASA CONTRERAS • BUILD ESTÁVEL</p>
+    <h1>v1.17 — estrutura corrigida sem cadeia intermediária</h1>
+    <p>Esta rota carrega diretamente a base validada, a reconstrução estrutural v26, a navegação corrigida, a limpeza, o realismo e o QA. Os patches intermediários que estavam interrompendo a carga foram removidos desta rota.</p>
+    <div class="controls"><div class="key"><b>W A S D</b><br>andar / escadas</div><div class="key"><b>Mouse</b><br>olhar</div><div class="key"><b>1 / 2 / 3</b><br>atalhos manuais</div><div class="key"><b>K</b><br>QA técnico</div><div class="key"><b>H / G</b><br>escala / grade</div></div>
+    <button id="enter">ENTRAR NO TERRENO</button>
+    <p class="note">Esperado: pilotis aberto, sem paredão; escadas externas v26; portas visíveis; quatro containers legíveis; móveis sociais refeitos.</p>
+  </div></div>
+  <div id="feedback"><div class="card"><p class="eyebrow">FEEDBACK CONTEXTUAL</p><h2>Feedback do elemento</h2><div id="feedbackTitle" class="feedback-title"></div><div id="feedbackMeta" class="meta"></div><textarea id="feedbackText"></textarea><div class="row"><button class="secondary" id="cancelFeedback">Cancelar</button><button id="sendFeedback">Salvar + abrir Issue no GitHub</button></div></div></div>
+  <div id="toast"></div>
+  <script type="module" src="./bootstrap-stable-v17.js?v=stable17a"></script>
+</body>
+</html>
