@@ -42,14 +42,16 @@ A sensação espacial deve ser corrigida por:
 - Passar por baixo da escada superior no térreo nunca pode alterar pavimento.
 - `1/2/3` são apenas atalhos manuais.
 
-### Autoridade v1.9
+### Autoridade de navegação v1.10
 
-`patch-v19-navigation-authority.js` é a **única autoridade de render/navegação vertical**.
+`patch-v20-navigation-preserve.js` é a camada final de navegação vertical.
 
-- O render final chama diretamente `THREE.WebGLRenderer.prototype.render` e bypassa wrappers antigos de `renderer.render`.
-- Eventos sintéticos legados `Digit1/2/3` ficam bloqueados.
+- O render final chama diretamente `THREE.WebGLRenderer.prototype.render`; wrappers antigos ficam carregados apenas por compatibilidade e são bypassados.
+- Eventos sintéticos antigos não podem comandar a navegação.
 - Troca automática de nível exige zona X/Z correta **e faixa Y correta** da escada.
-- A física usa olhos de referência internos ~1,66 m; a renderização visual é rebaixada para ~1,55 m, representando pessoa de 1,65 m.
+- O estado interno do pavimento é atualizado no topo/rodapé sem deslocar a câmera para o centro do andar.
+- A posição física é preservada no patamar.
+- A física usa olhos internos ~1,66 m; a renderização visual usa ~1,55 m para representar pessoa de 1,65 m.
 
 ## 4. Sacadas
 
@@ -79,23 +81,26 @@ A sensação espacial deve ser corrigida por:
 
 ## 7. Pavimento social
 
-Referência de distribuição:
+Distribuição:
 - cozinha posterior esquerda;
 - banheiro posterior direito;
-- ilha central com **3 banquetas**, não cadeiras comuns;
+- ilha central com **3 banquetas**;
 - jantar central/frontal;
 - sala frontal direita;
-- sofá voltado para TV;
+- sofá voltado para a TV;
+- mesa de centro entre sofá e TV;
 - grandes esquadrias e acessos às sacadas.
 
-Mobiliário deve ser realista e compacto. A v1.7 reduz apenas conjuntos superdimensionados; objetos já em medida real não devem ser falsamente reduzidos.
+Mobiliário deve ser realista e compacto. A v1.7 reduziu apenas conjuntos superdimensionados; objetos já em medida real não devem ser falsamente reduzidos.
 
 Medidas de referência:
 - sofá 3 lugares: ~1,80–2,00 m;
 - mesa 6 lugares: ~1,40–1,60 × 0,75–0,90 m;
-- cadeira: ~0,43–0,48 m de largura;
+- cadeira: ~0,43–0,48 m;
 - ilha: ~1,60–1,85 × 0,75–0,85 m;
 - bancada: ~0,60 m de profundidade.
+
+Regra v1.11: sofá deve olhar para a TV e a mesa de centro deve ficar funcionalmente entre ambos, mantendo o corredor central livre.
 
 ## 8. Pavimento íntimo
 
@@ -106,18 +111,34 @@ Distribuição:
 - gamer/escritório na frente direita;
 - banheiro íntimo nos fundos à direita.
 
-Regras:
-- cama queen aproximadamente **1,58 × 1,98 m**;
-- cama orientada para dentro, sem atravessar vidro ou parede;
-- guarda-roupa do casal inteiramente dentro do envelope e separado da cama;
-- quarto dos filhos usa **uma treliche de 3 níveis**, footprint aproximado **0,92 × 2,00 m**;
+### Quarto do casal — v1.11
+
+- cama queen ~**1,58 × 1,98 m**;
+- cama orientada para dentro, cabeceira na divisória posterior;
+- armário na lateral esquerda, sem atravessar a cama;
+- folga alvo observada: ~**0,63 m** entre armário e cama;
+- folga oposta: ~**0,64 m**;
+- pé da cama até parede frontal: ~**0,92 m**;
+- dois criados reposicionados junto à cama.
+
+### Quarto dos filhos
+
+- uma treliche de 3 níveis, footprint aproximado **0,92 × 2,00 m**;
 - bancada para 3 posições;
 - armário compacto sem bloquear porta;
-- banheiro e gamer fora da circulação principal.
+- circulação central livre.
+
+### Banheiro íntimo — v1.11
+
+- recinto fechado;
+- parede frontal separando banheiro do gamer;
+- acesso pelo corredor lateral;
+- vão de porta aproximado **0,78 m**;
+- collision boxes somente nas partes realmente fechadas;
+- vaso, bancada, banho/banheira e vidro permanecem funcionais.
 
 ## 9. Frente do lote
 
-Composição de referência:
 - carro/SUV junto ao portão;
 - vaga compacta, sem faixa pavimentada inútil até a casa;
 - cobertura leve/telhadinho próprio sobre a garagem;
@@ -150,7 +171,7 @@ Lago de peixes:
 - filtro biológico;
 - pedras/plantas próprias.
 
-Evitar elipses perfeitas e pedras idênticas. v1.9 adiciona ondulações visuais leves sem pós-processamento pesado.
+Evitar elipses perfeitas e pedras idênticas. Ondulações visuais devem ser leves e não usar refração cara.
 
 ## 11. Fundos produtivos
 
@@ -168,14 +189,15 @@ Evitar elipses perfeitas e pedras idênticas. v1.9 adiciona ondulações visuais
 Espécies: limão, laranja, mexerica, acerola, pitanga, goiaba, jabuticaba, manga, amora e banana quando couber.
 
 - Troncos predominantemente próximos aos **muros/perímetro**.
-- Miolo do terreno deve permanecer mais livre.
+- Miolo do terreno mais livre.
 - Copas podem avançar visualmente para dentro, mas não bloquear caminho, escada, garagem, lagos ou sistemas.
-- Copas devem ser irregulares, evitando aparência de esfera/Minecraft.
+- Copas irregulares, não esferas perfeitas.
+- v1.12 adiciona galhos instanciados e áreas de mulch/solo sob as árvores.
 
 ## 13. Energia e água
 
-Devem existir fisicamente no modelo:
-- **10 painéis fotovoltaicos** visíveis;
+Devem existir fisicamente:
+- **10 painéis fotovoltaicos**;
 - estrutura de suporte;
 - cobertura independente/ventilada;
 - calhas;
@@ -199,7 +221,8 @@ Meta: aproximar progressivamente das perspectivas de referência, sem falsificar
 - perfis e corrugação;
 - puxadores, metais e luminárias;
 - materiais com variação/textura procedural leve;
-- paisagismo tropical/produtivo denso.
+- paisagismo tropical/produtivo denso;
+- sombras de contato falsas para dar peso aos objetos sem shadowMap.
 
 Evitar:
 - aparência de Minecraft/CAD cru;
@@ -216,18 +239,21 @@ Evitar:
 - Raycast restrito a elementos selecionáveis.
 - Preferir geometrias/materiais compartilhados e InstancedMesh.
 - Evitar transmission/refração cara, pós-processamento pesado e dezenas de point lights.
-- Materiais procedurais leves são preferíveis a assets pesados enquanto a geometria ainda está em refinamento.
+- v1.12 usa sombras de contato procedurais, galhos e mulch instanciados, evitando shadowMap dinâmico.
 
 ## 16. QA ativo
 
 A cena expõe:
 - `window.__CASA_AUDIT_V16__`: implantação/sistemas/escadas/portas;
 - `window.__CASA_AUDIT_V17__`: escala, percepção, colisões e pomar;
-- `window.__CASA_AUDIT_V18__`: acessos e overlaps de mobiliário;
-- `window.__CASA_AUDIT_V19__`: autoridade de navegação, duplicidade de IDs, corredores, overlaps e envelope do guarda-roupa;
-- `window.__CASA_NAV_V19__`: estado de nível/escada/posição em runtime.
+- `window.__CASA_AUDIT_V18__`: acessos e overlaps;
+- `window.__CASA_AUDIT_V19__`: corredores, duplicidade e overlaps;
+- `window.__CASA_AUDIT_V20__`: navegação sem teleporte físico;
+- `window.__CASA_NAV_V20__`: nível/escada/progresso/posição;
+- `window.__CASA_AUDIT_V21__`: orientação da sala, master, banheiro íntimo e folgas;
+- `window.__CASA_AUDIT_V22__`: realismo leve e custo gráfico adicional.
 
-A revisão não deve ser considerada estável se houver falhas críticas nesses QA.
+A revisão não é considerada estável se houver falhas críticas nesses QA.
 
 ## 17. Cadeia ativa
 
@@ -241,6 +267,9 @@ A revisão não deve ser considerada estável se houver falhas críticas nesses 
 6. `patch-v17-spatial-audit.js`
 7. `patch-v18-access-space.js`
 8. `patch-v19-navigation-authority.js`
+9. `patch-v20-navigation-preserve.js`
+10. `patch-v21-interior-functional-fit.js`
+11. `patch-v22-lightweight-realism.js`
 
 Não substituir essa cadeia por `app-v09.js` isolado.
 
@@ -255,10 +284,11 @@ Não substituir essa cadeia por `app-v09.js` isolado.
 7. Deve existir circulação pedestre contínua frente → fundos.
 8. Nenhum caminho pode atravessar lago, árvore, canteiro ou equipamento.
 9. Caminhar fora da escada nunca pode mudar pavimento.
-10. Mobiliário deve ter escala realista e orientação funcional.
-11. Quartos/banheiros precisam de portas e passagens reais.
-12. Nenhum móvel pode atravessar outro móvel, parede ou circulação principal.
-13. Árvores frutíferas devem priorizar o perímetro.
-14. Sistemas sustentáveis precisam aparecer fisicamente.
-15. Mudança dimensional exige atualização conjunta deste master e do 3D.
-16. Estrutura, fundação, reforços de containers, hidráulica, elétrica, vento, corrosão costeira e legalização continuam conceituais até validação profissional.
+10. Troca automática de pavimento nunca pode deslocar a posição X/Z do jogador.
+11. Mobiliário deve ter escala realista e orientação funcional.
+12. Quartos/banheiros precisam de portas e passagens reais.
+13. Nenhum móvel pode atravessar outro móvel, parede ou circulação principal.
+14. Árvores frutíferas devem priorizar o perímetro.
+15. Sistemas sustentáveis precisam aparecer fisicamente.
+16. Mudança dimensional exige atualização conjunta deste master e do 3D.
+17. Estrutura, fundação, reforços de containers, hidráulica, elétrica, vento, corrosão costeira e legalização continuam conceituais até validação profissional.
