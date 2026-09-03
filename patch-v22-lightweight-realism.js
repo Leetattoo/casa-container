@@ -7,9 +7,6 @@ function byId(id){let hit=null;scene.traverse(o=>{if(!hit&&o.userData?.id===id)h
 function all(pred){const out=[];scene.traverse(o=>{if(pred(o))out.push(o);});return out;}
 function worldBounds(o){o.updateMatrixWorld(true);return new THREE.Box3().setFromObject(o);}
 
-// ------------------------------------------------------------------
-// 1) SOMBRA DE CONTATO PROCEDURAL: profundidade sem shadowMap.
-// ------------------------------------------------------------------
 function shadowTexture(){
   const c=document.createElement('canvas');c.width=c.height=128;
   const x=c.getContext('2d'),g=x.createRadialGradient(64,64,5,64,64,62);
@@ -26,9 +23,6 @@ const trees=all(o=>o.userData?.category==='Árvore frutífera');
 for(const t of trees){const p=t.getWorldPosition(new THREE.Vector3());shadowItems.push({x:p.x,y:.014,z:p.z,sx:1.15,sz:.90});}
 if(shadowItems.length){const inst=new THREE.InstancedMesh(shadowGeo,shadowMat,shadowItems.length),d=new THREE.Object3D();shadowItems.forEach((v,i)=>{d.position.set(v.x,v.y,v.z);d.rotation.set(-Math.PI/2,0,0);d.scale.set(v.sx,v.sz,1);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;inst.renderOrder=-1;scene.add(inst);}
 
-// ------------------------------------------------------------------
-// 2) POMAR: galhos + área de solo/mulch, ambos instanciados.
-// ------------------------------------------------------------------
 const woodMat=new THREE.MeshStandardMaterial({color:0x6f482d,roughness:.88});
 const soilMat=new THREE.MeshLambertMaterial({color:0x4b3526});
 const branchGeo=new THREE.CylinderGeometry(1,1,1,8),mulchGeo=new THREE.CylinderGeometry(1,1,1,20);
@@ -37,19 +31,14 @@ for(const t of trees){const p=t.getWorldPosition(new THREE.Vector3());for(let k=
 if(branchData.length){const inst=new THREE.InstancedMesh(branchGeo,woodMat,branchData.length),d=new THREE.Object3D(),up=new THREE.Vector3(0,1,0);branchData.forEach((v,i)=>{d.position.copy(v.p);d.quaternion.setFromUnitVectors(up,v.dir);d.scale.set(.028,v.len,.028);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;scene.add(inst);}
 if(trees.length){const inst=new THREE.InstancedMesh(mulchGeo,soilMat,trees.length),d=new THREE.Object3D();trees.forEach((t,i)=>{const p=t.getWorldPosition(new THREE.Vector3());d.position.set(p.x,.018,p.z);d.rotation.set(0,(i*.37)%Math.PI,0);d.scale.set(.38,.035,.34);d.updateMatrix();inst.setMatrixAt(i,d.matrix);});inst.instanceMatrix.needsUpdate=true;scene.add(inst);}
 
-// ------------------------------------------------------------------
-// 3) CAMINHO: tira uniformidade perfeita sem reduzir passagem.
-// ------------------------------------------------------------------
 const path=byId('CAMINHO-LATERAL-V15');
 let pathAdjusted=0;
 if(path){path.children.forEach((o,i)=>{if(!o.isMesh)return;const f=1+((i%5)-2)*.008;o.rotation.y=((i%7)-3)*.012;o.scale.x*=f;o.scale.z*=1-((i%3)-1)*.007;o.position.x+=((i%4)-1.5)*.008;o.updateMatrixWorld(true);pathAdjusted++;});}
 
-// ------------------------------------------------------------------
-// 4) VIDRO: leve brilho de borda nos acessos, sem refração cara.
-// ------------------------------------------------------------------
 const highlightMat=new THREE.MeshBasicMaterial({color:0xd9f2f2,transparent:true,opacity:.13,depthWrite:false,side:THREE.DoubleSide});
 const hiGroup=new THREE.Group();hiGroup.userData={id:'REFLEXOS-VIDRO-V22',label:'Reflexos leves em vidro',category:'Acabamento',selectable:false};scene.add(hiGroup);
-for(const [x,y,z,w,h,rot] of[[3.505,4.40,2.15,.025,1.45,0],[-1.00,7.42,3.665,.72,1.25,Math.PI/2]]){const p=new THREE.Mesh(new THREE.PlaneGeometry(w,h),highlightMat);p.position.set(x,y,z);p.rotation.y=rot;p.rotation.z=-.10;hiGroup.add(p);}
+// Lateral leste: plano YZ -> rotação 90°. Fundo: plano XY -> sem rotação Y.
+for(const [x,y,z,w,h,rot] of[[3.505,4.40,2.15,.025,1.45,Math.PI/2],[-1.00,7.42,3.665,.72,1.25,0]]){const p=new THREE.Mesh(new THREE.PlaneGeometry(w,h),highlightMat);p.position.set(x,y,z);p.rotation.y=rot;p.rotation.z=-.10;hiGroup.add(p);}
 
 renderer.shadowMap.enabled=false;
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,.92));
@@ -62,10 +51,11 @@ const audit={
  branchInstances:branchData.length,
  mulchInstances:trees.length,
  pathAdjusted,
+ glassHighlights:hiGroup.children.length,
  dynamicShadowMap:false,
- addedApproxDrawCalls:3+(hiGroup.children.length?1:0),
+ addedApproxDrawCalls:3+hiGroup.children.length,
  performanceIntent:'mais profundidade visual sem sombras dinâmicas/pós-processamento pesado',
- pass:shadowItems.length>0&&trees.length>0&&branchData.length===trees.length*3
+ pass:shadowItems.length>0&&trees.length>0&&branchData.length===trees.length*3&&hiGroup.children.length===2
 };
 window.__CASA_AUDIT_V22__=audit;
 console.info('[Casa Contreras] AUDIT v1.12',audit);
