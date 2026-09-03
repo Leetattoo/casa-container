@@ -5,57 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <meta name="theme-color" content="#0b0d0f" />
   <title>Casa Contreras — Tour 3D</title>
-  <link rel="stylesheet" href="./style.css?v=20260903-v16real2" />
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"
-    }
-  }
-  </script>
+  <link rel="stylesheet" href="./style.css?v=20260903-v17struct" />
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
 </head>
 <body>
-  <div id="hud">
-    <div id="crosshair"></div>
-    <div id="topbar"><b>CASA CONTRERAS — v1.16 REALISM UPGRADE</b></div>
-    <div id="selected"></div>
-  </div>
-  <div id="start">
-    <div class="card">
-      <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
-      <h1>Walkthrough métrico — realismo gráfico + QA estrutural</h1>
-      <p>Corpo habitável preservado em <b>7,076 × 6,058 m</b> por pavimento. Referência humana de <b>1,65 m</b>, escadas 100% externas, acessos e circulação auditados. A v1.16 melhora materiais, água, vegetação, vidro, aço e microdetalhes sem redimensionar a arquitetura.</p>
-      <div class="controls">
-        <div class="key"><b>W A S D</b><br>andar e subir escadas</div>
-        <div class="key"><b>Mouse</b><br>olhar</div>
-        <div class="key"><b>Shift / Espaço</b><br>correr / pular</div>
-        <div class="key"><b>1 / 2 / 3</b><br>atalhos de pavimento</div>
-        <div class="key"><b>H</b><br>escala humana 1,65 m</div>
-        <div class="key"><b>G</b><br>grade real de 1 m</div>
-        <div class="key"><b>Q</b><br>qualidade / FPS</div>
-        <div class="key"><b>K</b><br>auditoria técnica ao vivo</div>
-        <div class="key"><b>Clique</b><br>feedback do elemento</div>
-      </div>
-      <button id="enter">ENTRAR NO TERRENO</button>
-      <p class="note">v1.16: microtexturas PBR leves, água com profundidade/ondulação, corrugação instanciada do container, grama 3D, folhagem fina e iluminação recalibrada; nenhuma medida arquitetônica foi alterada.</p>
-    </div>
-  </div>
-  <div id="feedback">
-    <div class="card">
-      <p class="eyebrow">FEEDBACK CONTEXTUAL</p>
-      <h2>Feedback do elemento</h2>
-      <div id="feedbackTitle" class="feedback-title"></div>
-      <div id="feedbackMeta" class="meta"></div>
-      <textarea id="feedbackText" placeholder="Ex.: move este móvel; altera este lago; muda esta esquadria..."></textarea>
-      <div class="row">
-        <button class="secondary" id="cancelFeedback">Cancelar</button>
-        <button id="sendFeedback">Salvar + abrir Issue no GitHub</button>
-      </div>
-      <p class="note">O feedback fica salvo localmente e o formulário do GitHub é aberto preenchido.</p>
-    </div>
-  </div>
+  <div id="hud"><div id="crosshair"></div><div id="topbar"><b>CASA CONTRERAS — v1.17 STRUCTURAL / CONTAINER</b></div><div id="selected"></div></div>
+  <div id="start"><div class="card">
+    <p class="eyebrow">CASA CONTRERAS • MODELO NAVEGÁVEL</p>
+    <h1>Walkthrough métrico — correção estrutural + leitura real de container</h1>
+    <p>Corpo habitável preservado em <b>7,076 × 6,058 m</b> por pavimento. Referência humana <b>1,65 m</b>. A v1.17 corrige teleporte de escadas pela origem, reabre totalmente o pilotis, cria portas visíveis, alinha patamares/sacadas e reforça a leitura dos quatro containers.</p>
+    <div class="controls"><div class="key"><b>W A S D</b><br>andar / escadas</div><div class="key"><b>Mouse</b><br>olhar</div><div class="key"><b>Shift / Espaço</b><br>correr / pular</div><div class="key"><b>1 / 2 / 3</b><br>atalhos manuais</div><div class="key"><b>H</b><br>escala 1,65 m</div><div class="key"><b>G</b><br>grade 1 m</div><div class="key"><b>Q</b><br>qualidade/FPS</div><div class="key"><b>K</b><br>QA técnico</div></div>
+    <button id="enter">ENTRAR NO TERRENO</button>
+    <p class="note">v1.17: escada só engata pelos extremos; térreo sem paredão; portas frontais e traseiras visíveis; estrutura/corrugação de containers; móveis sociais refeitos.</p>
+  </div></div>
+  <div id="feedback"><div class="card"><p class="eyebrow">FEEDBACK CONTEXTUAL</p><h2>Feedback do elemento</h2><div id="feedbackTitle" class="feedback-title"></div><div id="feedbackMeta" class="meta"></div><textarea id="feedbackText"></textarea><div class="row"><button class="secondary" id="cancelFeedback">Cancelar</button><button id="sendFeedback">Salvar + abrir Issue no GitHub</button></div></div></div>
   <div id="toast"></div>
-  <script type="module" src="./bootstrap-v16.js?v=20260903-v16real2"></script>
+  <script type="module" src="./bootstrap-v16.js?v=20260903-v17struct"></script>
 </body>
 </html>
