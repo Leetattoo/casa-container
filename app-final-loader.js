@@ -3,21 +3,36 @@ import { PointerLockControls } from 'three/addons/controls/PointerLockControls.j
 
 /**
  * CASA CONTRERAS — FINAL LOADER
- * Carrega a cena refinada v0.4/v0.5, aplica a correção crítica identificada
- * na revisão final e mantém a build publicada estável sem depender de CI.
+ * Carrega a cena refinada, aplica o gate final e mantém a publicação estável
+ * sem depender de GitHub Actions/CI.
  */
 
 globalThis.__CASA_THREE__ = THREE;
 globalThis.__CASA_POINTER_LOCK__ = PointerLockControls;
 
+const SOURCES = [
+  './app-v04.js?v=final-20260903',
+  'https://raw.githubusercontent.com/Leetattoo/casa-container/main/app-v04.js?final=20260903'
+];
+
+async function loadSource() {
+  let lastError;
+  for (const url of SOURCES) {
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`HTTP ${response.status} em ${url}`);
+      return await response.text();
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError || new Error('Nenhuma fonte da cena 3D pôde ser carregada.');
+}
+
 async function boot() {
-  const response = await fetch('./app-v04.js?v=final-20260903', { cache: 'no-store' });
-  if (!response.ok) throw new Error(`Falha ao carregar cena 3D: HTTP ${response.status}`);
+  let source = await loadSource();
 
-  let source = await response.text();
-
-  // O módulo original importa Three diretamente. No Blob final, injetamos as
-  // referências já resolvidas pelo importmap do documento para máxima robustez.
+  // No Blob final, injetamos as referências já resolvidas pelo importmap.
   source = source
     .replace("import * as THREE from 'three';", 'const THREE = globalThis.__CASA_THREE__;')
     .replace("import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';", 'const PointerLockControls = globalThis.__CASA_POINTER_LOCK__;')
@@ -28,7 +43,6 @@ async function boot() {
     .replaceAll('Versão: v0.4', 'Versão: v0.5-final')
     .replaceAll('**Versão:** v0.4', '**Versão:** v0.5-final');
 
-  // Falha explícita se a correção esperada não tiver sido aplicada.
   if (source.includes("mat=M.concrete,id:'RESERVATORIO'")) {
     throw new Error('Gate final falhou: correção do reservatório não aplicada.');
   }
