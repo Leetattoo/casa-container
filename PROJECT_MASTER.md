@@ -4,10 +4,47 @@
 
 - Terreno-base navegável: **10,000 × 25,000 m** — retângulo exato, sem distorção em planta ou 3D.
 - Orientação atual da casa conforme a prancha geral aprovada: **7,076 m de fachada × 6,058 m de profundidade**.
+- Área de projeção desse envelope: **42,866 m²**.
+- A largura de 7,076 m decorre da composição nominal **2,438 + 2,200 + 2,438 m**: dois containers de 20 pés lado a lado com o vão central útil fechado.
 - Vão central entre containers: **2,200 m**, totalmente fechado e incorporado à área útil. Nunca representar como vazio, átrio ou corredor externo.
 - Estrutura residencial: dois pavimentos habitáveis elevados sobre pilotis.
 - Térreo funcional sob a casa.
-- Sacadas frontais nos dois pavimentos, com prolongamentos laterais conforme a referência visual.
+- Sacadas frontais nos dois pavimentos: **7,076 × 1,800 m** como dimensão-base da prancha; prolongamentos laterais são elementos externos adicionais quando previstos.
+
+## Escala humana do walkthrough
+
+- Regra do motor: **1 unidade Three.js = 1,000 m**.
+- Personagem de referência para percepção e colisão: **1,750 m de altura**.
+- Altura dos olhos/câmera: **1,660 m**.
+- Raio corporal/ombros usado na navegação: **0,270 m**.
+- Campo de visão arquitetônico: **60° vertical**. O antigo FOV de 70° ampliava artificialmente a percepção dos espaços em monitor widescreen.
+- Tecla `H` no tour mostra uma régua humana de 1,75 m para inspeção visual.
+
+## Referência de containers
+
+- Comprimento nominal de 20 pés usado no modelo: **6,058 m**.
+- Largura nominal usada por container: **2,438 m**.
+- High Cube permanece a solução preferida; altura externa de referência **2,896 m**, mas a aquisição/modelo exato do container ainda não está congelado. Portanto a altura vertical do invólucro 3D continua **provisória**, não deve ser tratada como medida executiva.
+
+## Auditoria dimensional v0.7
+
+### Certificado no modelo
+- lote: **10,000 × 25,000 m**;
+- envelope horizontal dos pavimentos: **7,076 × 6,058 m**;
+- vão central: **2,200 m**;
+- topo do piso social: **3,250 m**;
+- topo do piso íntimo: **6,250 m**;
+- sacada-base: **7,076 × 1,800 m**;
+- corredor veicular: **3,850 × 9,970 m**, envelope `x=0,850..4,700 / z=-12,300..-2,330`;
+- escala humana e FOV descritos acima.
+
+### Ainda NÃO certificado
+As cotas dos ambientes mostradas na prancha são a referência nominal, porém as divisórias internas do tour atual ainda não reproduzem todas essas cotas exatamente. A auditoria detectou, em especial, que os banheiros modelados não coincidem ainda com **1,60 × 2,20 m**. Portanto:
+
+- a geometria externa e a implantação podem ser usadas para coordenação espacial desta fase;
+- a planta interna atual **não é ainda a planta dimensional final**;
+- nenhuma resposta futura deve afirmar que “todas as medidas dos cômodos estão exatas” até a reconciliação das divisórias;
+- a próxima revisão dimensional deve reconstruir os ambientes a partir da prancha, preservando simultaneamente o envelope 7,076 × 6,058 m e o sistema estrutural.
 
 ## Referência visual vigente
 
@@ -76,3 +113,4 @@ A prancha geral aprovada pelo usuário em 02/09/2026 passa a comandar a implanta
 6. Feedbacks do tour devem registrar ID, categoria, posição do clique, posição da câmera e versão do projeto.
 7. Mudanças dimensionais não podem ocorrer silenciosamente: devem atualizar este master e o modelo 3D juntos.
 8. Estrutura, reforços, fundações, cargas, hidráulica, elétrica e legalização permanecem conceituais até validação profissional.
+9. Nenhuma planta pode ser declarada dimensionalmente fechada enquanto o relatório `window.__CASA_DIMENSION_QA__` indicar `roomPlanCertified: false`.
